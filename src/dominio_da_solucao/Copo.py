@@ -20,10 +20,10 @@ class Copo(object):
 		pass
 
 	def incrementa_jogada(self):
-		pass
+		self.___jogadas += self.___jogadas
 
 	def get_jogadas(self) -> int:
-		pass
+		return self.___jogadas
 
 	def remove_dado_lista(self, aIndex_dado : int):
 		pass

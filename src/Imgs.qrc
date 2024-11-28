@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="Imgs">
+    <file>background.png</file>
+    <file>mesa.png</file>
+  </qresource>
+</RCC>

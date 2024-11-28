@@ -25,7 +25,12 @@ class Categoria(object):
 		return any(seq.issubset(set(dados)) for seq in sequencias)
 
 	def valida_big_staight(self, dados : list) -> int:
-		pass
+		lista_ordenada = sorted(dados)
+		
+		if lista_ordenada == list(range(lista_ordenada[0], lista_ordenada[0] + 5)):
+			return True
+		
+		return False
 
 	def valida_yatch(self, dados : list) -> int:
 		return all(numero == dados[0] for numero in dados)

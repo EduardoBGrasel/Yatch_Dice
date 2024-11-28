@@ -18,14 +18,20 @@ class Tabela(object):
 	def recebe_status_partida_(self) -> int:
 		pass
 
-	def inicia_partida(self, aJogadores : string__, aId_jogador_local : str):
+	def inicia_partida(self, aJogadores : str, aId_jogador_local : str):
 		pass
 
 	def recebe_status(self) -> QPixmap:
 		pass
 
-	def soma_dados(self, aDados : list, aN : int) -> int:
-		pass
+	def soma_dados(self, dados : list, n : int) -> int:
+		aux_dado_categoria = n
+		aux_pontuacao_categoria = 0
+		for dado in dados:
+			if dado == aux_dado_categoria:
+				aux_pontuacao_categoria += dado
+
+		return aux_pontuacao_categoria
 
 	def atribui_four_of_a_kind(self) -> int:
 		pass

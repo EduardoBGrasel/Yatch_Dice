@@ -20,10 +20,11 @@ class Categoria(object):
 		contagens = [dados.count(dado) for dado in set(dados)]
 		return sorted(contagens) == [2, 3]
 
-	def valida_small_straight(self, aDados : list) -> int:
-		pass
+	def valida_small_straight(self, dados : list) -> int:
+		sequencias = [{1, 2, 3, 4}, {2, 3, 4, 5}, {3, 4, 5, 6}]
+		return any(seq.issubset(set(dados)) for seq in sequencias)
 
-	def valida_big_staight(self, aDados : list) -> int:
+	def valida_big_staight(self, dados : list) -> int:
 		pass
 
 	def valida_yatch(self, dados : list) -> int:

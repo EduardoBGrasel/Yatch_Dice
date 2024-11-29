@@ -6,49 +6,62 @@ from dominio_da_solucao import QPixmap
 from typing import List
 
 class Jogador(object):
-	def atribuir_pontuacao(self, aPontos : int) -> int:
+	def atribuir_pontuacao(self, pontos : int) -> int:
 		pass
 
-	def eh_seu_turno(self) -> int:
-		pass
+	def eh_seu_turno(self) -> bool:
+		if self.___turno == 1:
+			return True
+		else:
+			return False
 
 	def inverter_turno(self):
-		pass
+		if self.___turno == 1:
+			self.___turno == 0
+		else:
+			self.___turno == 1
 
 	def informar_vez(self) -> int:
-		pass
+		return self.___turno
 
 	def informa_vencedor(self) -> int:
-		pass
+		return self.___vencedor
 
 	def informa_jogador(self) -> str:
-		pass
+		self.___nome_jogador 
 
 	def reiniciar(self):
+		# ???
 		pass
 
 	def initialize(self, aSymbol : int, aIdentifier : str, aName : str):
+		# [TODO] - @Dudu
 		pass
 
 	def toogle_turn(self):
+		# [TODO] - @Dudu
 		pass
 
 	def iniciar_partida(self):
+		# [TODO] - @Dudu
 		pass
 
 	def atualiza_gui(self, aEstado_jogo : QPixmap):
+		# [TODO] - @Dudu
 		pass
 
 	def pontuacao_atribuida(self):
+		# ???
 		pass
 
 	def get_rounds_finalizados(self) -> int:
-		pass
+		return self.___rounds_finalizados
 
 	def get_vencedor(self) -> int:
-		pass
+		return self.___rounds_finalizados
 
 	def verifica_pontuacao_diferente(self) -> int:
+		# [TODO] - Pensar como pegar a pontuacao do oponente
 		pass
 
 	def __init__(self):

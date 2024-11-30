@@ -6,14 +6,46 @@ from dominio_da_solucao import Prisao
 from typing import List
 
 class Categoria(object):
-	def atribuir_pontuacao(self, aCategoria_escolhida : int):
-		pass
+
+	def atribuir_pontuacao(self, categoria_escolhida : int):
+		mesa = Mesa()
+		dados = mesa.get_dados()
+
+		if categoria_escolhida in [1,2,3,4,5,6]:
+			Tabela.soma_dados(dados, categoria_escolhida)
+
+		if categoria_escolhida == 7: # four of a kind
+			if self.valida_for_of_a_kind():
+				Tabela.atribui_full_house()
+			else:
+				Tabela.atribui_zero()
+
+		if categoria_escolhida == 8: # full house
+			if self.valida_full_house():
+				Tabela.atribui_full_house()
+			else:
+				Tabela.atribui_zero()
+
+		if categoria_escolhida == 9: # small straight
+			if self.valida_small_straight():
+				Tabela.atribui_full_house()
+			else:
+				Tabela.atribui_zero()	
+
+		if categoria_escolhida == 10: # big straight
+			if self.valida_big_staight():
+				Tabela.atribui_full_house()
+			else:
+				Tabela.atribui_zero()
+
+		if categoria_escolhida == 11: # yatch
+			if self.valida_yatch():
+				Tabela.atribui_full_house()
+			else:
+				Tabela.atribui_zero()
 
 	def valida_for_of_a_kind(self, dados : list) -> int:
 		return any(dados.count(dado) >= 4 for dado in set(dados))
-
-	def calcular_pontuacao(self, aCategoria_escolhida : int, aDados : list) -> int:
-		pass
 
 	def valida_full_house(self, dados : list) -> int:
 		contagens = []
@@ -36,6 +68,7 @@ class Categoria(object):
 		return all(numero == dados[0] for numero in dados)
 
 	def atualizar_categoria(self, aPontos : int):
+		# [TODO] - Colocar o numero na interface
 		pass
 
 	def __init__(self):

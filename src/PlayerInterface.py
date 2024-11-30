@@ -5,6 +5,7 @@ from window import Ui_MainWindow
 from dog.dog_interface import DogPlayerInterface
 from dog.dog_actor import DogActor
 from PySide6.QtCore import QMetaObject, Signal, Slot
+from dominio_da_solucao.Tabuleiro import Tabuleiro
 
 import sys
 import re
@@ -14,6 +15,8 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
     received_start_signal = Signal(str)
     def __init__(self, parent=None):
         super().__init__(parent)
+        tabuleiro = Tabuleiro()
+        print(tabuleiro)
         self.received_start_signal.connect(self.show_message)
         # Definindo o título da janela
         self.setWindowTitle("Jogo")

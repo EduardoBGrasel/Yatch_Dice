@@ -4,10 +4,10 @@ from dominio_da_solucao import Mesa
 from typing import List
 
 class Copo(object):
-	def tem_dado(self, aQuantidade_dados : int) -> Boolean:
+	def tem_dado(self, aQuantidade_dados : int):
 		pass
 
-	def tem_jogadas(self, aQuantidade_jogadas : int) -> Boolean:
+	def tem_jogadas(self, aQuantidade_jogadas : int) :
 		pass
 
 	def retira_dados_lista(self):

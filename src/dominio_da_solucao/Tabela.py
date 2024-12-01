@@ -2,7 +2,6 @@
 # -*- coding: UTF-8 -*-
 from dominio_da_solucao import Tabuleiro
 from dominio_da_solucao import Jogador
-from dominio_da_solucao import QPixmap
 from typing import List
 
 class Tabela(object):
@@ -21,7 +20,7 @@ class Tabela(object):
 	def inicia_partida(self, aJogadores : str, aId_jogador_local : str):
 		pass
 
-	def recebe_status(self) -> QPixmap:
+	def recebe_status(self):
 		pass
 
 	def soma_dados(self, dados : list, n : int) -> int:

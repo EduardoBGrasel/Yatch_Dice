@@ -2,7 +2,6 @@
 # -*- coding: UTF-8 -*-
 from dominio_da_solucao import Tabuleiro
 from dominio_da_solucao import Tabela
-from dominio_da_solucao import QPixmap
 from typing import List
 
 class Jogador(object):
@@ -46,7 +45,7 @@ class Jogador(object):
 		# [TODO] - @Dudu
 		pass
 
-	def atualiza_gui(self, aEstado_jogo : QPixmap):
+	def atualiza_gui(self, aEstado_jogo):
 		# [TODO] - @Dudu
 		pass
 

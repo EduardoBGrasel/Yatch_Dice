@@ -1,18 +1,15 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-from dominio_da_solucao import Tabuleiro
-from dominio_da_solucao import Dado
-from dominio_da_solucao import Copo
-from dominio_da_solucao import Prisao
-from dominio_da_solucao import Categoria
-from dominio_da_solucao import Jogador
+from dominio_da_solucao.Copo import Copo
+from dominio_da_solucao.Categoria import Categoria
+from dominio_da_solucao.Jogador import Jogador
 from typing import List
 
 class Mesa(object):
-	def receber_lista_dados(self, aDados : List) -> List:
+	def receber_lista_dados(self, aDados : List):
 		pass
 
-	def receber_dado_selecionado(self) -> Dado:
+	def receber_dado_selecionado(self):
 		pass
 
 	def get_turn_player(self) -> Jogador:
@@ -21,8 +18,8 @@ class Mesa(object):
 	def embaralhar_dados(self, aDados : List) -> List:
 		pass
 
-	def jogar_dados(self, aJogador : Jogador, aDados_selecioandos : list):
-		pass
+	def dados_jogados(self, aJogador : Jogador, aDados_selecioandos : list):
+		self.dados_jogados = self.copo.jogar_dados()
 
 	def dado_selecionado(self, aJogador : Jogador) -> int:
 		pass
@@ -43,7 +40,10 @@ class Mesa(object):
 		pass
 
 	def get_dados(self) -> list:
-		pass
+		return self.dados_jogados
+
+	def get_dados_selecionados(self):
+		return self.dados_selecionados
 
 	def get_if_jogados(self) -> int:
 		pass
@@ -57,25 +57,19 @@ class Mesa(object):
 	def get_if_categoria_escolhida(self) -> int:
 		pass
 
-	def atualiza_dado(self, aDado : Dado):
+	def atualiza_dado(self, aDado):
 		pass
 
 	def atualiza_dados(self, aDados : list):
 		pass
 
 	def __init__(self):
-		self.___dados_selecionados : list = None
-		self.___dados : list = None
-		self.___dados_jogados : int = None
-		self.___dado_selecionado : int = None
-		self.___maximo_selecao_atingido : int = None
-		self.___player_turn : int = None
-		self.___categoria_escolhida : int = None
-		self._unnamed_Tabuleiro_ : Tabuleiro = None
-		self._unnamed_Dado_ : Dado = None
-		self._unnamed_Copo_ : Copo = None
-		self._unnamed_Prisao_ : Prisao = None
-		"""# @AssociationKind Composition"""
-		self._unnamed_Categoria_ : Categoria = None
-		"""# @AssociationKind Composition"""
+		self.dados_selecionados : list = None
+		self.dados : list = None
+		self.dados_jogados : int = None
+		self.dado_selecionado : int = None
+		self.maximo_selecao_atingido : int = None
+		self.player_turn : int = None
+		self.categoria_escolhida : int = None
+		self.copo = Copo()
 

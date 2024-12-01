@@ -2,7 +2,6 @@
 # -*- coding: UTF-8 -*-
 from dominio_da_solucao import Tabela
 from dominio_da_solucao import Mesa
-from dominio_da_solucao import Prisao
 from typing import List
 
 class Categoria(object):
@@ -72,10 +71,7 @@ class Categoria(object):
 		pass
 
 	def __init__(self):
-		self.___categoria_escolhida : int = None
-		self.___categoty_points : int = None
-		self._unnamed_Tabela_ : Tabela = None
-		"""# @AssociationMultiplicity 1"""
-		self._unnamed_Mesa_ : Mesa = None
-		self._unnamed_Prisao_ : Prisao = None
+		self.categoria_escolhida : int = None
+		self.categoty_points : int = None
+
 

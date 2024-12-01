@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-from dominio_da_solucao import Mesa
+#from Mesa import Mesa
+from dominio_da_solucao.Dado import Dado
 from typing import List
 
 class Copo(object):
@@ -13,27 +14,31 @@ class Copo(object):
 	def retira_dados_lista(self):
 		pass
 
-	def dados_jogados(self) -> int:
-		pass
+	def jogar_dados(self):
+		dados = [Dado() for _ in range(5)]
+		for i in range(len(dados)):
+			if dados[i].dado_get_selecionado() == True:
+				dados[i].dado_set_numero()
+		return dados
 
 	def adicionado_dado_lista(self, aIndex_dado : int):
 		pass
 
 	def incrementa_jogada(self):
-		self.___jogadas += self.___jogadas
+		self.jogadas += self.jogadas
 
 	def get_jogadas(self) -> int:
-		return self.___jogadas
+		return self.jogadas
 
 	def remove_dado_lista(self, aIndex_dado : int):
 		pass
 
 	def __init__(self):
-		self.___total_dices : int = None
-		self.___result : list = None
-		self.___jogadas : int = None
-		self._unnamed_Mesa_ : Mesa = None
-		self._unnamed_Dado_ = []
-		"""# @AssociationMultiplicity 1..5
-		# @AssociationKind Aggregation"""
+		self.total_dices : int = None
+		self.result : list = None
+		self.jogadas : int = None
+
+if __name__ == "__main__":
+	copo = Copo()
+	copo.jogar_dados()
 

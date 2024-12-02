@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox, QTextBrowser, QPushButton, QLabel, QInputDialog
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QTextBrowser, QPushButton, QLabel, QInputDialog
 from PySide6.QtGui import QPixmap, QAction
 from PySide6.QtCore import Qt, QEvent
 from window import Ui_MainWindow
@@ -9,12 +9,6 @@ from dominio_da_solucao.Tabuleiro import Tabuleiro
 import sys
 import re
 from random import randint
-
-def lista_dados_para_dict(dados_mesa):
-        """
-        Converte uma lista de objetos Dado em um dicionário no formato {"dados": [lista de dados]}.
-        """
-        return {"dados": [dado.to_dict() for dado in dados_mesa]}
 
 class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
     received_start_signal = Signal(str)
@@ -46,7 +40,6 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
         self.max_jogadas = 4
         self.jogadas_atuais = 0
         self.player_points = [0, 0]
-        self.setupUi(self)
         
         #estado_jogo = self.tabuleiro.get_status()
         #self.atualiza_interface(estado_jogo)
@@ -55,6 +48,7 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
         self.dog_server_interface = DogActor()
         message = self.dog_server_interface.initialize(player_name, self)
         QMessageBox.about(self, "DogActor", f"{message}")
+        self.setupUi(self)
 
         # lista para os labels dos dados
         self.dados_interface.append(self.dado_1)
@@ -69,93 +63,18 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
         #self.Selecionar_dados.clicked.connect(self.Seleciona_dados)
         self.Jogar_dados.clicked.connect(self.Joga_dados)
 
-        for button in self.findChildren(QPushButton):
-            # Conectar o sinal clicked() de cada botão ao slot Category_points_button
-            button.clicked.connect(self.Category_points_button)
-        
-        # for dado in self.dados_interface:
-        #     dado.setVisible(False)
-        #     dado.installEventFilter(self)  # Instala o filtro de eventos em cada label
-    
-    def Category_points_button(self):
-        # Obter o botão que enviou o sinal (foi clicado)
-        button = self.sender()
-        # Recuperar o nome do botão
-        button_name = button.objectName()
-        if '1' in button_name and self.player_turn == 1 and self.verifica_selecionado:
-            button.hide()
-            for box in self.findChildren(QTextBrowser):
-                if box.objectName().replace('_value', "") == button.objectName().replace('_btn', ""):
-                    points = (randint(1, 10))
-                    box.setText(str(points))
-                    self.player_turn = (self.player_turn % 2) + 1
-                    self.verifica_selecionado = False
-                    self.jogadas_atuais = 0
-                    for dado in self.dados_interface:
-                        dado.setVisible(False)
-                        self.dados_selecionados = [True, True, True, True, True]
-                    self.player_points[0] += points
-                    self.Player_1_label.setText(f"Player_1: {self.player_points[0]}")
-                    return
-                
-        elif '2' in button_name and self.player_turn == 2 and self.verifica_selecionado:
-            button.hide()
-            for box in self.findChildren(QTextBrowser):
-                if box.objectName().replace('_value', "") == button.objectName().replace('_btn', ""):
-                    points = (randint(1, 10))
-                    box.setText(str(points))
-                    self.player_turn = (self.player_turn % 2) + 1
-                    self.verifica_selecionado = False
-                    self.jogadas_atuais = 0
-                    for dado in self.dados_interface:
-                        dado.setVisible(False)
-                        self.dados_selecionados = [True, True, True, True, True]
-                    self.player_points[1] += points
-                    self.Player_2_label.setText(f"Player_2: {self.player_points[1]}")
-                    return
-        if '1' in button_name or '2' in button_name:
-            QMessageBox.about(main_window, "ERRO", f"Verifique se selecionou os dados e se você selecionou o campo certo jogador {self.player_turn}")
-
 
     def Joga_dados(self):
         match_status = self.tabuleiro.get_match_status()
-        if match_status == 3 or match_status == 4:
+        print(match_status)
+
+        if match_status == 3:
             #game_state = self.tabuleiro.get_status()
             #self.atualiza_interface(game_state)
-
-            dados_da_mesa = self.tabuleiro.mesa.copo.jogar_dados()
-            for index in range(len(dados_da_mesa)):
-                if dados_da_mesa[index].dado_get_selecionado():  # Verifica se o dado está selecionado
-                    pixmap = QPixmap(f"dados_img/{dados_da_mesa[index].dado_get_numero()}.png")
-                    pixmap = pixmap.scaled(101, 101)
-                    self.dados_interface[index].setPixmap(pixmap)
-
-                    # Remove a borda vermelha após rejogar
-                    self.dados_interface[index].setStyleSheet("")  # Remove a borda
-
-                # Torna todos os dados visíveis (apenas se eles foram jogados)
-                for dado_interface in self.dados_interface:
-                    dado_interface.setVisible(True)  
-                self.jogadas_atuais += 1
-            move_to_send = lista_dados_para_dict(dados_da_mesa)
-            move_to_send["match_status"] = "next"
-            self.dog_server_interface.send_move(move_to_send)
-
-
-        
-    # def eventFilter(self, source, event):
-    #     # Verifica se o evento é um clique e se o nome da label segue o padrão "dado_x"
-    #     if event.type() == QEvent.MouseButtonPress and re.match(r"dado_\d+", source.objectName()):
-    #         index = int(source.objectName().split('_')[1]) - 1  # Obtém o índice do dado (0 a 4)
-    #         current_style = source.styleSheet()
-    #         if "border: 1px solid red;" in current_style:
-    #             source.setStyleSheet("")  # Remove a borda vermelha
-    #             self.dados_selecionados[index] = False  # Marca como não selecionado
-    #         else:
-    #             source.setStyleSheet("border: 1px solid red;")  # Aplica a borda vermelha
-    #             self.dados_selecionados[index] = True  # Marca como selecionado
-    #         return True  # Indica que o evento foi processado
-    #     return super(PlayerInterface, self).eventFilter(source, event)
+            move_to_send = self.tabuleiro.dados_jogados()
+            self.atualiza_dados_jogados(move_to_send["dados"])
+            if (bool(move_to_send)):
+                self.dog_server_interface.send_move(move_to_send)
     
     def start_match(self):
         match_status = self.tabuleiro.get_match_status()
@@ -176,19 +95,27 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
 
     @Slot(str)
     def show_message(self, message):
-        QMessageBox.about(self, "DogActor", f"{message}")
+        self.status_label.setText(message)  # Adicione QLabel ao layout da interface
 
     def receive_start(self, start_status):
-        message = start_status.get_message()
-        self.received_start_signal.emit(message)
+        players = start_status.get_players()
+        local_player_id = start_status.get_local_id()
+        self.tabuleiro.start_match(players, local_player_id)
+        game_state = self.tabuleiro.get_status()
+        self.atualiza_interface(game_state)
+    
+    def receive_withdrawal_notification(self):
+        self.tabuleiro.receive_withdrawal_notification()
+        game_state = self.tabuleiro.get_status()
+        self.atualiza_interface(game_state)
 
     def atualiza_interface(self, game_state):
         self.dados_jogados = game_state.get_lista_dados()
         self.dados_selecionados = game_state.get_lista_selecionados()
-        QMessageBox.about(self, "DogActor", game_state.get_message())
+        self.show_message(game_state.get_message())
+        #QMessageBox.about(self, "DogActor", f"{game_state.get_message()}")
     
-    def receive_move(self, a_move):
-        dados = a_move["dados"]
+    def atualiza_dados_jogados(self, dados):
         for index in range(len(dados)):
             pixmap = QPixmap(f"dados_img/{dados[index]['number']}.png")
             pixmap = pixmap.scaled(101, 101)
@@ -199,8 +126,12 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
 
         # Torna todos os dados visíveis (apenas se eles foram jogados)
         for dado_interface in self.dados_interface:
-            dado_interface.setVisible(True)  
-        self.jogadas_atuais += 1
+            dado_interface.setVisible(True)
+    
+    def receive_move(self, a_move):
+        if a_move["type"] == "dados_jogados":
+            dados = a_move["dados"]
+            self.atualiza_dados_jogados(dados)
         #move_to_send = lista_dados_para_dict(dados[index]["number"])
         #move_to_send["match_status"] = "next"
         #self.dog_server_interface.send_move(move_to_send)
@@ -214,10 +145,3 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
     #         self.dados_jogados = False
     #     else:
     #         QMessageBox.about(main_window, "ERRO", "JOGUE OS DADOS PRIMEIRO")
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    main_window = PlayerInterface()
-    main_window.show()
-    app.exec()

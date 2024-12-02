@@ -8,11 +8,35 @@ from dominio_da_solucao.interface_image import InterfaceImage
 from typing import List
 
 class Tabuleiro(object):
-	def iniciar_partida(self, aJogadores : str, aId_jogador_local : int):
-		pass
+	def __init__(self):
+		self.rounds = 22
+		self.local_player = Jogador()
+		self.remote_player  = Jogador()
+		self.local_player.initialize(1, "jogador1", "jogador_1")
+		self.remote_player.initialize(2, "jogador2", "jogador_2")
+		self.regular_move = True
+		self.mesa = Mesa()
+		self.tabela = Tabela()
+		self.match_status = 1
+		self.player_turn : int = None
+		self.vencedor = ""
+		# self._unnamed_QPixmap_
+		# self._unnamed_Estado_ : Estado = None
+		# self._unnamed_Jogador_ = []
+		# """# @AssociationMultiplicity 2
+		# # @AssociationKind Composition"""
+		# self._unnamed_Mesa_ : Mesa = None
+		# """# @AssociationKind Composition"""
+		# self._unnamed_Tabela_ : Tabela = None
+		# """# @AssociationKind Composition"""
+		# self._unnamed_PlayerInterface_ : PlayerInterface = None
+	
+	def recieve_move(self, a_move):
+		if a_move["type"] == "dados_jogados":
+			pass
 			
 
-	def receber_notificacao_abandono(self):
+	def receive_withdrawal_notification(self):
 		self.match_status = 6
 
 	def get_status(self):
@@ -30,7 +54,7 @@ class Tabuleiro(object):
 			elif self.match_status == 4:
 				interface.set_message(turn_player.get_name() + ", selecione os dados, case deseje!, ou selecione categoria")
 			elif self.match_status == 5:
-				interface.set_message("Aguarando lance do adversário: " + self.jogador_remoto.get_name())
+				interface.set_message("Aguarando lance do adversário: " + self.remote_player.get_name())
 			elif self.match_status == 6:
 				interface.set_message("Adversário abandonou a partida")
 		return interface
@@ -41,17 +65,19 @@ class Tabuleiro(object):
 	def start_match(self, players, local_id):
 		playerA_name = players[0][0]
 		playerA_id = players[0][1]
-		PlayerA_order = players[0][2]
+		playerA_order = players[0][2]
 		playerB_name = players[1][0]
 		playerB_id = players[1][1]
-		self.jogador_local.initialize(1, playerA_id, playerA_name)
-		self.jogador_remoto.initialize(2, playerB_id, playerB_name)
-		if PlayerA_order == '1':
-			self.jogador_local.toogle_turn()
-			self.match_status = 3
+		self.local_player.reset()
+		self.remote_player.reset()
+		self.local_player.initialize(1, playerA_id, playerA_name)
+		self.remote_player.initialize(2, playerB_id, playerB_name)
+		if playerA_order == "1":
+			self.local_player.toogle_turn()
+			self.match_status = 3  #    waiting piece or origin selection (first action)
 		else:
-			self.jogador_remoto.toogle_turn()
-			self.match_status = 5
+			self.remote_player.toogle_turn()
+			self.match_status = 5  #    waiting remote action
 
 	def atribuir_pontuacao_jogador(self, aPontos : int):
 		pass
@@ -60,13 +86,21 @@ class Tabuleiro(object):
 		pass
 
 	def get_turn_player(self) -> Jogador:
-		if self.jogador_local.eh_seu_turno():
-			return self.jogador_local
-		elif self.jogador_remoto.eh_seu_turno():
-			return self.jogador_remoto
+		if self.local_player.eh_seu_turno():
+			return self.local_player
+		elif self.remote_player.eh_seu_turno():
+			return self.remote_player
 
-	def jogar_dados(self, aLista_dados : list):
-		pass
+	def dados_jogados(self):
+		if self.match_status == 3:
+			dados = self.mesa.copo.jogar_dados()
+			self.rounds =-1;
+			self.match_status = 4
+			move_to_send = {"dados": [dado.to_dict() for dado in dados]}
+			move_to_send["match_status"] = "next"
+			move_to_send["type"] = "dados_jogados"
+			return move_to_send
+
 
 	def dado_selecionado(self) -> int:
 		pass
@@ -88,27 +122,4 @@ class Tabuleiro(object):
 
 	def indentificar_area_acao(self) -> str:
 		pass
-
-	def __init__(self):
-		self.rounds = 22
-		self.jogador_local = Jogador()
-		self.jogador_remoto  = Jogador()
-		self.jogador_local.initialize(1, "jogador1", "jogador_1")
-		self.jogador_remoto.initialize(2, "jogador2", "jogador_2")
-		self.regular_move = True
-		self.mesa = Mesa()
-		self.tabela = Tabela()
-		self.match_status = 1
-		self.player_turn : int = None
-		self.vencedor = ""
-		# self._unnamed_QPixmap_
-		# self._unnamed_Estado_ : Estado = None
-		# self._unnamed_Jogador_ = []
-		# """# @AssociationMultiplicity 2
-		# # @AssociationKind Composition"""
-		# self._unnamed_Mesa_ : Mesa = None
-		# """# @AssociationKind Composition"""
-		# self._unnamed_Tabela_ : Tabela = None
-		# """# @AssociationKind Composition"""
-		# self._unnamed_PlayerInterface_ : PlayerInterface = None
 

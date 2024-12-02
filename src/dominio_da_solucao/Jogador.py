@@ -4,6 +4,18 @@ from dominio_da_solucao.Tabela import Tabela
 from typing import List
 
 class Jogador(object):
+	def __init__(self):
+		self.attempts = 0
+		self.total_points = 0
+		self.name = ""
+		self.symbol = None
+		self.indentifier = 0
+		self.rounds_finalizados = False
+		self.vencedor = False
+		self.turno = False
+		self.pontuacao_round_atribuida = 0
+		self.jogada_finalizada = False
+
 	def atribuir_pontuacao(self, pontos : int) -> int:
 		pass
 
@@ -12,6 +24,19 @@ class Jogador(object):
 			return True
 		else:
 			return False
+	
+	def reset(self):
+		self.attempts = 0
+		self.total_points = 0
+		self.name = ""
+		self.symbol = None
+		self.indentifier = 0
+		self.rounds_finalizados = False
+		self.vencedor = False
+		self.turno = False
+		self.pontuacao_round_atribuida = 0
+		self.jogada_finalizada = False
+
 
 	def inverter_turno(self):
 		if self.turno == 1:
@@ -26,13 +51,10 @@ class Jogador(object):
 		return self.vencedor
 
 	def informa_jogador(self) -> str:
-		self.nome_jogador 
-
-	def reiniciar(self):
-		# ???
-		pass
+		self.name
 
 	def initialize(self, aSymbol : int, aIdentifier : str, aName : str):
+		self.reset()
 		self.name = aName
 		self.symbol = aSymbol
 		self.indentifier = aIdentifier
@@ -60,12 +82,3 @@ class Jogador(object):
 		# [TODO] - Pensar como pegar a pontuacao do oponente
 		pass
 
-	def __init__(self):
-		self.attempts : int = None
-		self.total_points : int = None
-		self.nome_jogador : str = None
-		self.rounds_finalizados : int = None
-		self.vencedor : int = None
-		self.turno = False
-		self.pontuacao_round_atribuida : int = None
-		self.jogada_finalizada : int = None

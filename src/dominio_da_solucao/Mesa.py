@@ -18,8 +18,9 @@ class Mesa(object):
 	def embaralhar_dados(self, aDados : List) -> List:
 		pass
 
-	def dados_jogados(self, aJogador : Jogador, aDados_selecioandos : list):
+	def jogar_dados(self):
 		self.dados_jogados = self.copo.jogar_dados()
+		return self.dados_jogados
 
 	def dado_selecionado(self, aJogador : Jogador) -> int:
 		pass

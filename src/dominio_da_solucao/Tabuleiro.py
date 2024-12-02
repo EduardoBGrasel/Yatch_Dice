@@ -10,11 +10,7 @@ from typing import List
 class Tabuleiro(object):
 	def iniciar_partida(self, aJogadores : str, aId_jogador_local : int):
 		pass
-
-	def receive_move(self, a_move):
-		dados = a_move["dados"]
-		if self.match_status == 5:
-			pass
+			
 
 	def receber_notificacao_abandono(self):
 		self.match_status = 6

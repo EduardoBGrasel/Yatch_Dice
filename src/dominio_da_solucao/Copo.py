@@ -33,6 +33,7 @@ class Copo(object):
 	def remove_dado_lista(self, aIndex_dado : int):
 		pass
 
+
 	def __init__(self):
 		self.total_dices : int = None
 		self.result : list = None

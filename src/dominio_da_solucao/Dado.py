@@ -23,8 +23,19 @@ class Dado(object):
 	def dado_get_numero(self):
 		return self.number
 
+	def to_dict(self):
+		"""
+		Copia as informações do objeto para um dicionário.
+		"""
+		return {
+			"number": self.number,
+			"index_dado": self.index_dado,
+			"selecionado": self.selecionado,
+		}
+
 	def __init__(self):
 		self.number : int = None
 		self.index_dado : int = None
 		self.selecionado = True
+
 

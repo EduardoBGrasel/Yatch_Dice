@@ -10,6 +10,12 @@ import sys
 import re
 from random import randint
 
+def lista_dados_para_dict(dados_mesa):
+        """
+        Converte uma lista de objetos Dado em um dicionário no formato {"dados": [lista de dados]}.
+        """
+        return {"dados": [dado.to_dict() for dado in dados_mesa]}
+
 class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
     received_start_signal = Signal(str)
     def __init__(self, parent=None):
@@ -110,15 +116,14 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
         if '1' in button_name or '2' in button_name:
             QMessageBox.about(main_window, "ERRO", f"Verifique se selecionou os dados e se você selecionou o campo certo jogador {self.player_turn}")
 
+
     def Joga_dados(self):
         match_status = self.tabuleiro.get_match_status()
         if match_status == 3 or match_status == 4:
-            move_to_send = self.tabuleiro.mesa.copo.jogar_dados()
-            game_state = self.tabuleiro.get_status()
-            self.atualiza_interface(game_state)
-            #self.dog_server_interface.send_move(move_to_send)
+            #game_state = self.tabuleiro.get_status()
+            #self.atualiza_interface(game_state)
 
-            dados_da_mesa = move_to_send
+            dados_da_mesa = self.tabuleiro.mesa.copo.jogar_dados()
             for index in range(len(dados_da_mesa)):
                 if dados_da_mesa[index].dado_get_selecionado():  # Verifica se o dado está selecionado
                     pixmap = QPixmap(f"dados_img/{dados_da_mesa[index].dado_get_numero()}.png")
@@ -132,6 +137,10 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
                 for dado_interface in self.dados_interface:
                     dado_interface.setVisible(True)  
                 self.jogadas_atuais += 1
+            move_to_send = lista_dados_para_dict(dados_da_mesa)
+            move_to_send["match_status"] = "next"
+            self.dog_server_interface.send_move(move_to_send)
+
 
         
     # def eventFilter(self, source, event):
@@ -163,6 +172,7 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
                 game_state = self.tabuleiro.get_status()
                 self.atualiza_interface(game_state)
                 QMessageBox.about(self, "DogActor", f"{start_status.get_message()}")
+    
 
     @Slot(str)
     def show_message(self, message):
@@ -178,7 +188,22 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
         QMessageBox.about(self, "DogActor", game_state.get_message())
     
     def receive_move(self, a_move):
-        self.tabulerio.reciv
+        dados = a_move["dados"]
+        for index in range(len(dados)):
+            pixmap = QPixmap(f"dados_img/{dados[index]['number']}.png")
+            pixmap = pixmap.scaled(101, 101)
+            self.dados_interface[index].setPixmap(pixmap)
+
+            # Remove a borda vermelha após rejogar
+            self.dados_interface[index].setStyleSheet("")  # Remove a borda
+
+        # Torna todos os dados visíveis (apenas se eles foram jogados)
+        for dado_interface in self.dados_interface:
+            dado_interface.setVisible(True)  
+        self.jogadas_atuais += 1
+        #move_to_send = lista_dados_para_dict(dados[index]["number"])
+        #move_to_send["match_status"] = "next"
+        #self.dog_server_interface.send_move(move_to_send)
 
 
 

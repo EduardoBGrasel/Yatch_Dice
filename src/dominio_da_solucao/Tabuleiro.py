@@ -20,17 +20,8 @@ class Tabuleiro(object):
 		self.match_status = 1
 		self.player_turn : int = None
 		self.vencedor = ""
-		# self._unnamed_QPixmap_
-		# self._unnamed_Estado_ : Estado = None
-		# self._unnamed_Jogador_ = []
-		# """# @AssociationMultiplicity 2
-		# # @AssociationKind Composition"""
-		# self._unnamed_Mesa_ : Mesa = None
-		# """# @AssociationKind Composition"""
-		# self._unnamed_Tabela_ : Tabela = None
-		# """# @AssociationKind Composition"""
-		# self._unnamed_PlayerInterface_ : PlayerInterface = None
-	
+
+
 	def recieve_move(self, a_move):
 		if a_move["type"] == "dados_jogados":
 			pass
@@ -90,20 +81,52 @@ class Tabuleiro(object):
 			return self.local_player
 		elif self.remote_player.eh_seu_turno():
 			return self.remote_player
+	
+	def get_regular_move(self):
+		return self.regular_move
 
-	def dados_jogados(self):
+
+	def jogar_dados(self):
+		jogador = self.get_turn_player()
+		# if jogador.get_max_attempts() == jogador.get_current_attempts():
+		# 	self.regular_move = False
 		if self.match_status == 3:
-			dados = self.mesa.copo.jogar_dados()
-			self.rounds =-1;
+			dados = self.mesa.jogar_dados()
 			self.match_status = 4
+			for i in range(len(dados)):
+				dados[i].remover_destaque()
 			move_to_send = {"dados": [dado.to_dict() for dado in dados]}
 			move_to_send["match_status"] = "next"
 			move_to_send["type"] = "dados_jogados"
+			jogador.incrementa_current_attempts()
 			return move_to_send
+		elif self.match_status == 4:
+			dados = self.mesa.get_dados()
+			dados = self.mesa.copo.rejogar_dados(dados)
+			for i in range(len(dados)):
+				dados[i].remover_destaque()
+			move_to_send = {"dados": [dado.to_dict() for dado in dados]}
+			move_to_send["match_status"] = "next"
+			move_to_send["type"] = "dados_jogados"
+			jogador.incrementa_current_attempts()
+			return move_to_send
+		
+			
 
 
-	def dado_selecionado(self) -> int:
-		pass
+	def dado_selecionado(self, index, str):
+		if self.match_status == 4:
+			dados = self.mesa.get_dados()
+			move_to_send = {}
+			if  str == "add":
+				dados[index].adicionar_destaque()
+			elif str == "remove":
+				dados[index].remover_destaque()
+			move_to_send["type"] = "dado_selecionado"
+			move_to_send["index"] = index
+			move_to_send["destaque"] = dados[index].get_destaque()
+			move_to_send["match_status"] = "next"
+			return move_to_send
 
 	def escolher_categoria(self, aCategoria_escolhida : int):
 		pass

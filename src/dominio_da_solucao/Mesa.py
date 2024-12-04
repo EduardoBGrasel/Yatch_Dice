@@ -22,8 +22,8 @@ class Mesa(object):
 		self.dados_jogados = self.copo.jogar_dados()
 		return self.dados_jogados
 
-	def dado_selecionado(self, aJogador : Jogador) -> int:
-		pass
+	def dado_selecionado(self, index, dados) -> int:
+		self.copo.dado_selecionado(index, dados)
 
 	def escolher_categoria(self, aCategoria_escolhida : int):
 		pass

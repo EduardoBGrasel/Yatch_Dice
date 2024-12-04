@@ -8,11 +8,14 @@ class Dado(object):
 	def definir_dado(self, aIndex_selecionado : int):
 		pass
 
-	def remover_destaque(self, aIndex : int):
+	def remover_destaque(self):
 		self.selecionado = False
 
-	def adicionar_destaque(self, aIndex : int):
+	def adicionar_destaque(self):
 		self.selecionado = True
+	
+	def get_destaque(self):
+		return self.selecionado
 
 	def dado_set_numero(self):
 		self.number = randint(1, 6)

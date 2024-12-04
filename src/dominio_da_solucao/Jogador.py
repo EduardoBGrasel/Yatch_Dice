@@ -5,7 +5,8 @@ from typing import List
 
 class Jogador(object):
 	def __init__(self):
-		self.attempts = 0
+		self.max_attempts = 4
+		self.current_attempts = 0
 		self.total_points = 0
 		self.name = ""
 		self.symbol = None
@@ -15,6 +16,18 @@ class Jogador(object):
 		self.turno = False
 		self.pontuacao_round_atribuida = 0
 		self.jogada_finalizada = False
+	
+	def incrementa_current_attempts(self):
+		self.current_attempts = self.current_attempts + 1
+
+	def get_current_attempts(self):
+		return self.current_attempts
+
+	def zera_attempts(self):
+		self.current_attempts = 0;
+	
+	def get_max_attempts(self):
+		return self.max_attempts
 
 	def atribuir_pontuacao(self, pontos : int) -> int:
 		pass

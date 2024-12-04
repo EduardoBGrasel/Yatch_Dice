@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QMainWindow, QMessageBox, QTextBrowser, QPushButton, QLabel, QInputDialog
 from PySide6.QtGui import QPixmap, QAction
-from PySide6.QtCore import Qt, QEvent
+from PySide6.QtCore import Qt, QEvent, QObject
 from window import Ui_MainWindow
 from dog.dog_interface import DogPlayerInterface
 from dog.dog_actor import DogActor
@@ -56,25 +56,47 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
         self.dados_interface.append(self.dado_3)
         self.dados_interface.append(self.dado_4)
         self.dados_interface.append(self.dado_5)
+        self.dado_map = {self.dado_1: 1, self.dado_2: 2, self.dado_3: 3, self.dado_4: 4, self.dado_5: 5}
         for dado in self.dados_interface:
             dado.setVisible(False)
+            dado.installEventFilter(self)  # Instala o filtro de eventos em cada QLabel
 
         # conectar o sinal clicked com seu slot
         #self.Selecionar_dados.clicked.connect(self.Seleciona_dados)
         self.Jogar_dados.clicked.connect(self.Joga_dados)
+    
+    def eventFilter(self, obj: QObject, event: QEvent) -> bool:
+        # Verifica se o evento ocorreu em um QLabel e se é um clique do mouse
+        if obj in self.dados_interface and event.type() == QEvent.MouseButtonPress:
+            self.Seleciona_Dado(obj)  # Chama o método para tratar o clique
+            return True  # Indica que o evento foi tratado
+        return super().eventFilter(obj, event)
+
+    def Seleciona_Dado(self, dado: QLabel):
+        match_status = self.tabuleiro.get_match_status()
+        index = self.dado_map[dado] - 1 # REFERENTE AO LABEL DA INTERFACE
+        move_to_send = {}
+        if match_status == 4 or match_status == 3:
+            # Verifica se o dado já está destacado
+            if "border: 1px solid red;" in dado.styleSheet():
+                # Remove o destaque (borda vermelha)
+                move_to_send = self.tabuleiro.dado_selecionado(index, "remove")
+                dado.setStyleSheet("")
+            else:
+                # Adiciona o destaque (borda vermelha)
+                move_to_send = self.tabuleiro.dado_selecionado(index, "add")
+                dado.setStyleSheet("border: 1px solid red;")
+        self.dog_server_interface.send_move(move_to_send)
 
 
     def Joga_dados(self):
         match_status = self.tabuleiro.get_match_status()
-        print(match_status)
-
-        if match_status == 3:
-            #game_state = self.tabuleiro.get_status()
-            #self.atualiza_interface(game_state)
-            move_to_send = self.tabuleiro.dados_jogados()
+        if (match_status == 3 or match_status == 4):
+            move_to_send = self.tabuleiro.jogar_dados()
             self.atualiza_dados_jogados(move_to_send["dados"])
             if (bool(move_to_send)):
                 self.dog_server_interface.send_move(move_to_send)
+
     
     def start_match(self):
         match_status = self.tabuleiro.get_match_status()
@@ -128,13 +150,22 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
         for dado_interface in self.dados_interface:
             dado_interface.setVisible(True)
     
+    def atualiza_dados_selecionados(self, index, destaque):
+        dado = self.dados_interface[index]
+        if not destaque:
+            dado.setStyleSheet("")
+        else:
+            dado.setStyleSheet("border: 1px solid red;")
+
+    
     def receive_move(self, a_move):
         if a_move["type"] == "dados_jogados":
             dados = a_move["dados"]
             self.atualiza_dados_jogados(dados)
-        #move_to_send = lista_dados_para_dict(dados[index]["number"])
-        #move_to_send["match_status"] = "next"
-        #self.dog_server_interface.send_move(move_to_send)
+        elif a_move["type"] == "dado_selecionado":
+            index = a_move["index"]
+            destaque = a_move["destaque"]
+            self.atualiza_dados_selecionados(index, destaque)
 
 
 

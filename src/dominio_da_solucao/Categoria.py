@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-from dominio_da_solucao import Tabela
+from dominio_da_solucao.Tabela import Tabela
 from typing import List
 
 class Categoria(object):
@@ -8,37 +8,37 @@ class Categoria(object):
 	def atribuir_pontuacao(self, categoria_escolhida, dados):
 
 		if categoria_escolhida in [1,2,3,4,5,6]:
-			self.tabela.soma_dados(categoria_escolhida, dados)
+			return self.tabela.soma_dados(categoria_escolhida, dados)
 
 		if categoria_escolhida == 7: # four of a kind
-			if self.valida_for_of_a_kind():
-				self.tabela.atribui_full_house()
+			if self.valida_for_of_a_kind(dados):
+				return self.tabela.atribui_four_of_a_kind()
 			else:
-				self.tabela.atribui_zero()
+				return self.tabela.atribui_zero()
 
 		if categoria_escolhida == 8: # full house
-			if self.valida_full_house():
-				self.tabela.atribui_full_house()
+			if self.valida_full_house(dados):
+				return self.tabela.atribui_full_house()
 			else:
-				self.tabela.atribui_zero()
+				return self.tabela.atribui_zero()
 
 		if categoria_escolhida == 9: # small straight
-			if self.valida_small_straight():
-				self.tabela.atribui_full_house()
+			if self.valida_small_straight(dados):
+				return self.tabela.atribui_small_straight()
 			else:
-				self.tabela.atribui_zero()	
+				return self.tabela.atribui_zero()	
 
 		if categoria_escolhida == 10: # big straight
-			if self.valida_big_staight():
-				self.tabela.atribui_full_house()
+			if self.valida_big_staight(dados):
+				return self.tabela.atribui_big_straight()
 			else:
-				self.tabela.atribui_zero()
+				return self.tabela.atribui_zero()
 
 		if categoria_escolhida == 11: # yatch
-			if self.valida_yatch():
-				self.tabela.atribui_full_house()
+			if self.valida_yatch(dados):
+				return self.tabela.atribui_yatch()
 			else:
-				self.tabela.atribui_zero()
+				return self.tabela.atribui_zero()
 
 	def valida_for_of_a_kind(self, dados : list) -> int:
 		return any(dados.count(dado) >= 4 for dado in set(dados))
@@ -63,9 +63,6 @@ class Categoria(object):
 	def valida_yatch(self, dados : list) -> int:
 		return all(numero == dados[0] for numero in dados)
 
-	def atualizar_categoria(self, aPontos : int):
-		# [TODO] - Colocar o numero na interface
-		pass
 
 	def __init__(self):
 		self.categoria_escolhida : int = None

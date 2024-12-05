@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 from dominio_da_solucao.Jogador import Jogador
 from dominio_da_solucao.Mesa import Mesa
-from dominio_da_solucao.Tabela import Tabela
+from dominio_da_solucao.Categoria import Categoria
 from dominio_da_solucao.Dado import Dado
 from dominio_da_solucao.interface_image import InterfaceImage
 from typing import List
@@ -16,7 +16,7 @@ class Tabuleiro(object):
 		self.remote_player.initialize(2, "jogador2", "jogador_2")
 		self.regular_move = True
 		self.mesa = Mesa()
-		self.tabela = Tabela()
+		self.categoria = Categoria()
 		self.match_status = 1
 		self.player_turn : int = None
 		self.vencedor = ""
@@ -135,25 +135,94 @@ class Tabuleiro(object):
 
 	def escolher_categoria(self, str1):
 		dados = self.mesa.get_dados()
+		dados_valores = []
+		for i in range(len(dados)):
+			dados_valores.append(dados[i].dado_get_numero())
 		move_to_send = {}
 		pontos = 0
 		jogador = self.get_turn_player()
 		self.rounds = self.rounds - 1
 		if self.match_status == 4:
 			if "Ones" in str1:
-				pontos = self.tabela.soma_dados(1, dados)
+				pontos = self.categoria.atribuir_pontuacao(1, dados)
 				move_to_send["category"] = str1
 				move_to_send["pontuacao"] = pontos
 				move_to_send["match_status"] = "next"
 				move_to_send["type"] = "categoria"
+
 			elif "Twos" in str1:
-				pontos = self.tabela.soma_dados(2, dados)
+				pontos = self.categoria.atribuir_pontuacao(2, dados)
 				move_to_send["category"] = str1
 				move_to_send["pontuacao"] = pontos
 				move_to_send["match_status"] = "next"
 				move_to_send["type"] = "categoria"
-				
+
+			elif "Threes" in str1:
+				pontos = self.categoria.atribuir_pontuacao(3, dados)
+				move_to_send["category"] = str1
+				move_to_send["pontuacao"] = pontos
+				move_to_send["match_status"] = "next"
+				move_to_send["type"] = "categoria"
+
+			elif "Fours" in str1:
+				pontos = self.categoria.atribuir_pontuacao(4, dados)
+				move_to_send["category"] = str1
+				move_to_send["pontuacao"] = pontos
+				move_to_send["match_status"] = "next"
+				move_to_send["type"] = "categoria"
+
+			elif "Fives" in str1:
+				pontos = self.categoria.atribuir_pontuacao(5, dados)
+				move_to_send["category"] = str1
+				move_to_send["pontuacao"] = pontos
+				move_to_send["match_status"] = "next"
+				move_to_send["type"] = "categoria"
+
+			elif "Sixes" in str1:
+				pontos = self.categoria.atribuir_pontuacao(6, dados)
+				move_to_send["category"] = str1
+				move_to_send["pontuacao"] = pontos
+				move_to_send["match_status"] = "next"
+				move_to_send["type"] = "categoria"
+
+			elif "Full_House" in str1:
+				pontos = self.categoria.atribuir_pontuacao(8, dados_valores)
+				move_to_send["category"] = str1
+				move_to_send["pontuacao"] = pontos
+				move_to_send["match_status"] = "next"
+				move_to_send["type"] = "categoria"
+
+			elif "S_Straight" in str1:
+				pontos = self.categoria.atribuir_pontuacao(9, dados_valores)
+				move_to_send["category"] = str1
+				move_to_send["pontuacao"] = pontos
+				move_to_send["match_status"] = "next"
+				move_to_send["type"] = "categoria"
+
+			elif "B_Straight" in str1:
+				pontos = self.categoria.atribuir_pontuacao(10, dados_valores)
+				move_to_send["category"] = str1
+				move_to_send["pontuacao"] = pontos
+				move_to_send["match_status"] = "next"
+				move_to_send["type"] = "categoria"
+
+			elif "Yatch" in str1:
+				pontos = self.categoria.atribuir_pontuacao(11, dados_valores)
+				move_to_send["category"] = str1
+				move_to_send["pontuacao"] = pontos
+				move_to_send["match_status"] = "next"
+				move_to_send["type"] = "categoria"
+
+			elif "Four_Of" in str1:
+				pontos = self.categoria.atribuir_pontuacao(7, dados_valores)
+				move_to_send["category"] = str1
+				move_to_send["pontuacao"] = pontos
+				move_to_send["match_status"] = "next"
+				move_to_send["type"] = "categoria"
+			
+
 			jogador.atribuir_pontuacao(pontos)
+			self.regular_move = True
 			self.local_player.toogle_turn()
 			self.remote_player.toogle_turn()
 			if self.local_player.eh_seu_turno():

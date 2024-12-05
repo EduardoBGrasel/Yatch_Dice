@@ -62,6 +62,9 @@ class Jogador(object):
 	def informa_jogador(self) -> str:
 		self.name
 
+	def get_pontuacao_total(self):
+		return self.total_points
+
 	def initialize(self, aSymbol : int, aIdentifier : str, aName : str):
 		self.reset()
 		self.name = aName
@@ -77,9 +80,4 @@ class Jogador(object):
 		elif self.turno == True:
 			self.turno == False
 
-	def get_rounds_finalizados(self) -> int:
-		return self.rounds_finalizados
-
-	def get_vencedor(self) -> int:
-		return self.rounds_finalizados
 

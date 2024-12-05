@@ -216,3 +216,8 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
             button = a_move["category"]
             self.tabuleiro.match_status = 3
             self.update_category_signal.emit(button, pontuacao)
+            if self(a_move["vencedor"]):
+                self.tabuleiro.match_status = 2
+                status = self.tabuleiro.get_status()
+                self.atualiza_interface(status)
+            

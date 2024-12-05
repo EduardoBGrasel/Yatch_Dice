@@ -20,6 +20,7 @@ class Tabuleiro(object):
 		self.match_status = 1
 		self.player_turn : int = None
 		self.vencedor = ""
+		self.empate = False
 
 
 	def recieve_move(self, a_move):
@@ -222,21 +223,32 @@ class Tabuleiro(object):
 			
 
 			jogador.atribuir_pontuacao(pontos)
+
+
 			self.regular_move = True
+			jogador.zera_attempts()
 			self.local_player.toogle_turn()
 			self.remote_player.toogle_turn()
 			if self.local_player.eh_seu_turno():
 				self.match_status = 5  #    waiting piece or origin selection (first action)
 			else:
 				self.match_status = 3  #    waiting remote move
+
+			if self.rounds == 0:
+				self.match_status = 2
+				self.verifica_vencedor()
 				
 		return move_to_send
 
-	def verifica_final(self, aRounds : int) -> int:
-		pass
-
-	def verifica_vencedor(self, aPontuacao, aPontuacao_remota) -> int:
-		pass
+	def verifica_vencedor(self):
+		local_points = self.local_player .get_pontuacao_total()
+		remote_points = self.remote_player.get_pontuacao_total()
+		if local_points > remote_points:
+			self.vencedor = self.local_player.get_name()
+		elif local_points < remote_points:
+			self.vencedor = self.remote_player.get_name()
+		else:
+			self.vencedor = "Empatou!"
 
 	def get_vencedor(self):
 		return self.vencedor

@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QMainWindow, QMessageBox, QTextBrowser, QPushButton, QLabel, QInputDialog
 from PySide6.QtGui import QPixmap, QAction
-from PySide6.QtCore import Qt, QEvent, QObject
+from PySide6.QtCore import Qt, QEvent, QObject, QGenericArgument
 from window import Ui_MainWindow
 from dog.dog_interface import DogPlayerInterface
 from dog.dog_actor import DogActor
@@ -12,10 +12,12 @@ from random import randint
 
 class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
     received_start_signal = Signal(str)
+    update_category_signal = Signal(str, int)  # sinal que passa o nome do botão e os pontos
     def __init__(self, parent=None):
         super().__init__(parent)
         self.tabuleiro = Tabuleiro()
         self.received_start_signal.connect(self.show_message)
+        self.update_category_signal.connect(self.atualiza_categoria)
         # Definindo o título da janela
         self.setWindowTitle("Jogo")
 
@@ -31,18 +33,7 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
 
         # Adicionando a ação ao menu "Jogo"
         jogo_menu.addAction(iniciar_acao)
-
-        self.dados_jogados = False
-        self.player_turn = 1
-        #self.verifica_dados = False
-        self.verifica_selecionado = False
         self.dados_interface = list()
-        self.max_jogadas = 4
-        self.jogadas_atuais = 0
-        self.player_points = [0, 0]
-        
-        #estado_jogo = self.tabuleiro.get_status()
-        #self.atualiza_interface(estado_jogo)
 
         player_name, _ = QInputDialog.getText(None, "Nome do Jogador", "Digite seu nome:")
         self.dog_server_interface = DogActor()
@@ -61,9 +52,35 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
             dado.setVisible(False)
             dado.installEventFilter(self)  # Instala o filtro de eventos em cada QLabel
 
+        for button in self.findChildren(QPushButton):
+            # Conectar o sinal clicked() de cada botão ao slot Category_points_button
+            button.clicked.connect(self.escolher_categoria)
+
         # conectar o sinal clicked com seu slot
         #self.Selecionar_dados.clicked.connect(self.Seleciona_dados)
         self.Jogar_dados.clicked.connect(self.Joga_dados)
+    
+    def escolher_categoria(self):
+        # Obter o botão que enviou o sinal (foi clicado)
+        button = self.sender()
+        # Recuperar o nome do botão
+        if '1' in button.objectName() and self.tabuleiro.get_match_status() == 4:
+            for box in self.findChildren(QTextBrowser):
+                if box.objectName().replace('_value', "") == button.objectName().replace('_btn', ""):
+                    button.hide()
+                    print(button.objectName())
+                    move_to_send = self.tabuleiro.escolher_categoria(button.objectName())
+                    points = move_to_send["pontuacao"]
+                    box.setText(str(points))
+                    #self.verifica_selecionado = False
+                    #self.jogadas_atuais = 0
+                    for dado in self.dados_interface:
+                        dado.setVisible(False)
+                    #self.player_points[0] += points
+                    #self.Player_1_label.setText(f"Player_1: {self.player_points[0]}")
+                    game_state = self.tabuleiro.get_status()
+                    self.atualiza_interface(game_state)
+                    self.dog_server_interface.send_move(move_to_send)
     
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:
         # Verifica se o evento ocorreu em um QLabel e se é um clique do mouse
@@ -93,6 +110,9 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
         match_status = self.tabuleiro.get_match_status()
         if (match_status == 3 or match_status == 4):
             move_to_send = self.tabuleiro.jogar_dados()
+            if move_to_send == 1:
+                QMessageBox.about(self, "DogActor", "Tentativas máximas, escolha categoria")
+                return
             self.atualiza_dados_jogados(move_to_send["dados"])
             if (bool(move_to_send)):
                 self.dog_server_interface.send_move(move_to_send)
@@ -132,8 +152,6 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
         self.atualiza_interface(game_state)
 
     def atualiza_interface(self, game_state):
-        self.dados_jogados = game_state.get_lista_dados()
-        self.dados_selecionados = game_state.get_lista_selecionados()
         self.show_message(game_state.get_message())
         #QMessageBox.about(self, "DogActor", f"{game_state.get_message()}")
     
@@ -156,6 +174,33 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
             dado.setStyleSheet("")
         else:
             dado.setStyleSheet("border: 1px solid red;")
+    
+    def atualiza_categoria(self, button_name, points):
+        # Encontrar o botão na interface pelo nome
+        button_name = button_name.replace("_btn_1", "_btn_2")
+        button = self.findChild(QPushButton, button_name)  # Substitua QPushButton pelo tipo correto, se necessário
+        button.hide()  # Esconde o botão
+        label_name = button_name.replace("_btn_2", "_value_2")
+        label = self.findChild(QTextBrowser, label_name)
+        points = str(points)
+        label.setText(points)
+        for dado in self.dados_interface:
+            dado.setVisible(False)
+        game_state = self.tabuleiro.get_status()
+        self.atualiza_interface(game_state)
+        # Ajustar o nome para encontrar o QTextBrowser correspondente
+        # for box in self.findChildren(QTextBrowser):
+        #     if box.objectName().replace('_value', "") == button.objectName().replace('_btn', ""):
+            
+
+        
+
+
+#     box.setText(str(points))  # Atualiza o QTextBrowser com os pontos
+    
+#     # Oculta os dados da interface
+#     for dado in self.dados_interface:
+#         dado.setVisible(False)
 
     
     def receive_move(self, a_move):
@@ -166,13 +211,8 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
             index = a_move["index"]
             destaque = a_move["destaque"]
             self.atualiza_dados_selecionados(index, destaque)
-
-
-
-    # def Seleciona_dados(self):
-    #     if self.dados_jogados:
-    #         QMessageBox.about(main_window, "SUCESSO", "Selecionar dados")
-    #         self.verifica_selecionado = True
-    #         self.dados_jogados = False
-    #     else:
-    #         QMessageBox.about(main_window, "ERRO", "JOGUE OS DADOS PRIMEIRO")
+        elif a_move["type"] == "categoria":
+            pontuacao = a_move["pontuacao"]
+            button = a_move["category"]
+            self.tabuleiro.match_status = 3
+            self.update_category_signal.emit(button, pontuacao)

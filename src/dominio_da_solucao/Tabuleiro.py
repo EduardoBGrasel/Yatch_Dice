@@ -76,6 +76,11 @@ class Tabuleiro(object):
 	def receber_selecao_de_dado(self, aDado : Dado):
 		pass
 
+	def get_player_symbol(self):
+		player = self.get_turn_player()
+		symbol = player.get_symbol()
+		return symbol
+
 	def get_turn_player(self) -> Jogador:
 		if self.local_player.eh_seu_turno():
 			return self.local_player
@@ -88,9 +93,9 @@ class Tabuleiro(object):
 
 	def jogar_dados(self):
 		jogador = self.get_turn_player()
-		# if jogador.get_max_attempts() == jogador.get_current_attempts():
-		# 	self.regular_move = False
-		if self.match_status == 3:
+		if jogador.get_max_attempts() == jogador.get_current_attempts():
+			self.regular_move = False
+		elif self.match_status == 3:
 			dados = self.mesa.jogar_dados()
 			self.match_status = 4
 			for i in range(len(dados)):
@@ -110,7 +115,7 @@ class Tabuleiro(object):
 			move_to_send["type"] = "dados_jogados"
 			jogador.incrementa_current_attempts()
 			return move_to_send
-		
+		return 1;
 			
 
 
@@ -128,8 +133,35 @@ class Tabuleiro(object):
 			move_to_send["match_status"] = "next"
 			return move_to_send
 
-	def escolher_categoria(self, aCategoria_escolhida : int):
-		pass
+	def escolher_categoria(self, str1):
+		dados = self.mesa.get_dados()
+		move_to_send = {}
+		pontos = 0
+		jogador = self.get_turn_player()
+		self.rounds = self.rounds - 1
+		if self.match_status == 4:
+			if "Ones" in str1:
+				pontos = self.tabela.soma_dados(1, dados)
+				move_to_send["category"] = str1
+				move_to_send["pontuacao"] = pontos
+				move_to_send["match_status"] = "next"
+				move_to_send["type"] = "categoria"
+			elif "Twos" in str1:
+				pontos = self.tabela.soma_dados(2, dados)
+				move_to_send["category"] = str1
+				move_to_send["pontuacao"] = pontos
+				move_to_send["match_status"] = "next"
+				move_to_send["type"] = "categoria"
+				
+			jogador.atribuir_pontuacao(pontos)
+			self.local_player.toogle_turn()
+			self.remote_player.toogle_turn()
+			if self.local_player.eh_seu_turno():
+				self.match_status = 5  #    waiting piece or origin selection (first action)
+			else:
+				self.match_status = 3  #    waiting remote move
+				
+		return move_to_send
 
 	def verifica_final(self, aRounds : int) -> int:
 		pass

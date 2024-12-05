@@ -30,7 +30,7 @@ class Jogador(object):
 		return self.max_attempts
 
 	def atribuir_pontuacao(self, pontos : int) -> int:
-		pass
+		self.total_points += pontos
 
 	def eh_seu_turno(self) -> bool:
 		if self.turno == 1:
@@ -49,13 +49,9 @@ class Jogador(object):
 		self.turno = False
 		self.pontuacao_round_atribuida = 0
 		self.jogada_finalizada = False
-
-
-	def inverter_turno(self):
-		if self.turno == 1:
-			self.turno == 0
-		else:
-			self.turno == 1
+	
+	def get_symbol(self):
+		return self.symbol
 
 	def informar_vez(self) -> int:
 		return self.turno
@@ -81,17 +77,9 @@ class Jogador(object):
 		elif self.turno == True:
 			self.turno == False
 
-	def pontuacao_atribuida(self):
-		# ???
-		pass
-
 	def get_rounds_finalizados(self) -> int:
 		return self.rounds_finalizados
 
 	def get_vencedor(self) -> int:
 		return self.rounds_finalizados
-
-	def verifica_pontuacao_diferente(self) -> int:
-		# [TODO] - Pensar como pegar a pontuacao do oponente
-		pass
 

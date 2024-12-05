@@ -23,13 +23,13 @@ class Tabela(object):
 	def recebe_status(self):
 		pass
 
-	def soma_dados(self, dados : list, n : int) -> int:
+	def soma_dados(self, n, dados) -> int:
 		aux_dado_categoria = n
 		aux_pontuacao_categoria = 0
 		for dado in dados:
-			if dado == aux_dado_categoria:
-				aux_pontuacao_categoria += dado
-
+			dado_value = dado.dado_get_numero()
+			if dado_value == aux_dado_categoria:
+				aux_pontuacao_categoria += dado_value
 		return aux_pontuacao_categoria
 
 	def atribui_four_of_a_kind(self) -> int:
@@ -51,10 +51,10 @@ class Tabela(object):
 		pass
 
 	def __init__(self):
-		self.___entries : list = None
-		self._unnamed_Tabuleiro_ : Tabuleiro = None
-		self._unnamed_Jogador_ : Jogador = None
-		self._unnamed_Categoria_ = []
-		"""# @AssociationMultiplicity 11
-		# @AssociationKind Aggregation"""
+		self.yatch = 50
+		self.big_straight = 35
+		self.full_house = 25
+		self.little_straight = 20
+		self.four_of_a_kind = 40
+
 

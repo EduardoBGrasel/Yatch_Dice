@@ -27,7 +27,7 @@ class Copo(object):
 		for i in range(len(dados)):
 			if dados[i].dado_get_selecionado():
 				dados[i].dado_set_numero()
-				return dados	
+		return dados	
 
 	def adicionado_dado_lista(self, aIndex_dado : int):
 		pass

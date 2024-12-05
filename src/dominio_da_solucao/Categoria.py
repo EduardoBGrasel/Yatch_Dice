@@ -1,47 +1,44 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 from dominio_da_solucao import Tabela
-from dominio_da_solucao import Mesa
 from typing import List
 
 class Categoria(object):
 
-	def atribuir_pontuacao(self, categoria_escolhida : int):
-		mesa = Mesa()
-		dados = mesa.get_dados()
+	def atribuir_pontuacao(self, categoria_escolhida, dados):
 
 		if categoria_escolhida in [1,2,3,4,5,6]:
-			Tabela.soma_dados(dados, categoria_escolhida)
+			self.tabela.soma_dados(categoria_escolhida, dados)
 
 		if categoria_escolhida == 7: # four of a kind
 			if self.valida_for_of_a_kind():
-				Tabela.atribui_full_house()
+				self.tabela.atribui_full_house()
 			else:
-				Tabela.atribui_zero()
+				self.tabela.atribui_zero()
 
 		if categoria_escolhida == 8: # full house
 			if self.valida_full_house():
-				Tabela.atribui_full_house()
+				self.tabela.atribui_full_house()
 			else:
-				Tabela.atribui_zero()
+				self.tabela.atribui_zero()
 
 		if categoria_escolhida == 9: # small straight
 			if self.valida_small_straight():
-				Tabela.atribui_full_house()
+				self.tabela.atribui_full_house()
 			else:
-				Tabela.atribui_zero()	
+				self.tabela.atribui_zero()	
 
 		if categoria_escolhida == 10: # big straight
 			if self.valida_big_staight():
-				Tabela.atribui_full_house()
+				self.tabela.atribui_full_house()
 			else:
-				Tabela.atribui_zero()
+				self.tabela.atribui_zero()
 
 		if categoria_escolhida == 11: # yatch
 			if self.valida_yatch():
-				Tabela.atribui_full_house()
+				self.tabela.atribui_full_house()
 			else:
-				Tabela.atribui_zero()
+				self.tabela.atribui_zero()
 
 	def valida_for_of_a_kind(self, dados : list) -> int:
 		return any(dados.count(dado) >= 4 for dado in set(dados))
@@ -73,5 +70,6 @@ class Categoria(object):
 	def __init__(self):
 		self.categoria_escolhida : int = None
 		self.categoty_points : int = None
+		self.tabela = Tabela()
 
 

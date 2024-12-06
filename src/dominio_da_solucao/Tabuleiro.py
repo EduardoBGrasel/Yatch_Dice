@@ -218,7 +218,6 @@ class Tabuleiro(object):
 			self.local_player.toogle_turn()
 			self.remote_player.toogle_turn()
 			if self.local_player.eh_seu_turno():
-				self.local_player.decrementa_round()
 				self.match_status = 5  #    waiting piece or origin selection (first action)
 			else:
 				self.match_status = 3  #    waiting remote move

@@ -213,6 +213,5 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
             pontuacao = a_move["pontuacao"]
             button = a_move["category"]
             self.tabuleiro.match_status = 3
-            self.tabuleiro.remote_player.decrementa_round()
             self.update_category_signal.emit(button, pontuacao)
             

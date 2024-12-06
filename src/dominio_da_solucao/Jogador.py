@@ -15,9 +15,16 @@ class Jogador(object):
 		self.turno = False
 		self.pontuacao_round_atribuida = 0
 		self.jogada_finalizada = False
+		self.rounds = 1
 	
 	def incrementa_current_attempts(self):
 		self.current_attempts = self.current_attempts + 1
+	
+	def decrementa_round(self):
+		self.rounds = self.rounds - 1
+	
+	def get_rounds(self):
+		return self.rounds
 
 	def get_current_attempts(self):
 		return self.current_attempts

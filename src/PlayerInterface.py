@@ -68,12 +68,9 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
             for box in self.findChildren(QTextBrowser):
                 if box.objectName().replace('_value', "") == button.objectName().replace('_btn', ""):
                     button.hide()
-                    print(button.objectName())
                     move_to_send = self.tabuleiro.escolher_categoria(button.objectName())
                     points = move_to_send["pontuacao"]
                     box.setText(str(points))
-                    #self.verifica_selecionado = False
-                    #self.jogadas_atuais = 0
                     for dado in self.dados_interface:
                         dado.setVisible(False)
                     #self.player_points[0] += points
@@ -81,6 +78,7 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
                     game_state = self.tabuleiro.get_status()
                     self.atualiza_mensagem(game_state)
                     self.dog_server_interface.send_move(move_to_send)
+
     
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:
         # Verifica se o evento ocorreu em um QLabel e se é um clique do mouse
@@ -215,9 +213,6 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
             pontuacao = a_move["pontuacao"]
             button = a_move["category"]
             self.tabuleiro.match_status = 3
+            self.tabuleiro.remote_player.decrementa_round()
             self.update_category_signal.emit(button, pontuacao)
-            if self(a_move["vencedor"]):
-                self.tabuleiro.match_status = 2
-                status = self.tabuleiro.get_status()
-                self.atualiza_mensagem(status)
             

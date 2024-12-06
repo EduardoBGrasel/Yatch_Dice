@@ -8,7 +8,7 @@ from dominio_da_solucao.interface_image import InterfaceImage
 
 class Tabuleiro(object):
 	def __init__(self):
-		self.rounds = 22
+		self.finished = False
 		self.local_player = Jogador()
 		self.remote_player  = Jogador()
 		self.local_player.initialize(1, "jogador1", "jogador_1")
@@ -133,7 +133,6 @@ class Tabuleiro(object):
 		move_to_send = {}
 		pontos = 0
 		jogador = self.get_turn_player()
-		self.rounds = self.rounds - 1
 		if self.match_status == 4:
 			if "Ones" in str1:
 				pontos = self.categoria.atribuir_pontuacao(1, dados)
@@ -214,22 +213,20 @@ class Tabuleiro(object):
 			
 
 			jogador.atribuir_pontuacao(pontos)
-
-
 			self.regular_move = True
 			jogador.zera_attempts()
 			self.local_player.toogle_turn()
 			self.remote_player.toogle_turn()
 			if self.local_player.eh_seu_turno():
+				self.local_player.decrementa_round()
 				self.match_status = 5  #    waiting piece or origin selection (first action)
 			else:
 				self.match_status = 3  #    waiting remote move
-
-			if self.rounds == 0:
-				self.match_status = 2
-				self.verifica_vencedor()
 				
 		return move_to_send
+	
+	def get_finished(self):
+		return self.finished
 
 	def verifica_vencedor(self):
 		local_points = self.local_player .get_pontuacao_total()

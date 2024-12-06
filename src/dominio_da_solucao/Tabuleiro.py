@@ -5,7 +5,6 @@ from dominio_da_solucao.Mesa import Mesa
 from dominio_da_solucao.Categoria import Categoria
 from dominio_da_solucao.Dado import Dado
 from dominio_da_solucao.interface_image import InterfaceImage
-from typing import List
 
 class Tabuleiro(object):
 	def __init__(self):
@@ -71,12 +70,6 @@ class Tabuleiro(object):
 			self.remote_player.toogle_turn()
 			self.match_status = 5  #    waiting remote action
 
-	def atribuir_pontuacao_jogador(self, aPontos : int):
-		pass
-
-	def receber_selecao_de_dado(self, aDado : Dado):
-		pass
-
 	def get_player_symbol(self):
 		player = self.get_turn_player()
 		symbol = player.get_symbol()
@@ -116,9 +109,7 @@ class Tabuleiro(object):
 			move_to_send["type"] = "dados_jogados"
 			jogador.incrementa_current_attempts()
 			return move_to_send
-		return 1;
-			
-
+		return 1
 
 	def dado_selecionado(self, index, str):
 		if self.match_status == 4:
@@ -252,10 +243,4 @@ class Tabuleiro(object):
 
 	def get_vencedor(self):
 		return self.vencedor
-
-	def atualizar_estado(self):
-		pass
-
-	def indentificar_area_acao(self) -> str:
-		pass
 

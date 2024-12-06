@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+from dominio_da_solucao.Mesa import Mesa
 from dominio_da_solucao.Tabela import Tabela
-from typing import List
 
 class Categoria(object):
 
@@ -41,32 +41,45 @@ class Categoria(object):
 				return self.tabela.atribui_zero()
 
 	def valida_for_of_a_kind(self, dados : list) -> int:
-		return any(dados.count(dado) >= 4 for dado in set(dados))
+		if any(dados.count(dado) >= 4 for dado in set(dados)):
+			aux_valido = True
+		else: aux_valido = False
+
+		return aux_valido
 
 	def valida_full_house(self, dados : list) -> int:
 		contagens = []
 		contagens = [dados.count(dado) for dado in set(dados)]
-		return sorted(contagens) == [2, 3]
+
+		if sorted(contagens) == [2, 3]:
+			aux_valido = True
+		else: aux_valido = False
+
+		return aux_valido
 
 	def valida_small_straight(self, dados : list) -> int:
-		sequencias = [{1, 2, 3, 4}, {2, 3, 4, 5}, {3, 4, 5, 6}]
-		return any(seq.issubset(set(dados)) for seq in sequencias)
+		sequencias = [{1, 2, 3, 4}, {2, 3, 4, 5}, {3, 4, 5, 6}]    
+
+		if any(seq.issubset(set(dados)) for seq in sequencias):
+			aux_valido = True
+		else: aux_valido = False
+
+		return aux_valido
 
 	def valida_big_staight(self, dados : list) -> int:
 		lista_ordenada = sorted(dados)
+		aux_valido = False
 		
 		if lista_ordenada == list(range(lista_ordenada[0], lista_ordenada[0] + 5)):
-			return True
-		
-		return False
+			aux_valido = True
+		else: aux_valido = False
+
+		return aux_valido
 
 	def valida_yatch(self, dados : list) -> int:
 		return all(numero == dados[0] for numero in dados)
 
-
 	def __init__(self):
 		self.categoria_escolhida : int = None
-		self.categoty_points : int = None
 		self.tabela = Tabela()
-
-
+		self.mesa = Mesa()

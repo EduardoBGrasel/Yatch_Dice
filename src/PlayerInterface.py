@@ -151,7 +151,7 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
         game_state = self.tabuleiro.get_status()
         self.atualiza_interface(game_state)
 
-    def atualiza_interface(self, game_state):
+    def atualiza_mensagem(self, game_state):
         self.show_message(game_state.get_message())
         #QMessageBox.about(self, "DogActor", f"{game_state.get_message()}")
     

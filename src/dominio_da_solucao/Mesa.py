@@ -1,9 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 from dominio_da_solucao.Copo import Copo
-from dominio_da_solucao.Categoria import Categoria
-from dominio_da_solucao.Jogador import Jogador
-from typing import List
 
 class Mesa(object):
 
@@ -11,10 +8,10 @@ class Mesa(object):
 		self.dados_jogados = self.copo.jogar_dados()
 		return self.dados_jogados
 
-	def dado_selecionado(self, index, dados) -> int:
+	def dado_selecionado(self, index, dados):
 		self.copo.dado_selecionado(index, dados)
 
-	def get_dados(self) -> list:
+	def get_dados(self):
 		return self.dados_jogados
 
 	def get_dados_selecionados(self):

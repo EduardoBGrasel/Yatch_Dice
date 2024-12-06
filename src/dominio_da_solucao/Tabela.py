@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-from typing import List
 
 class Tabela(object):
 
@@ -20,7 +19,7 @@ class Tabela(object):
 		return self.full_house
 	
 	def atribui_small_straight(self) -> int:
-		return self.little_straight
+		return self.small_straight
 
 	def atribui_big_straight(self) -> int:
 		return self.big_straight
@@ -35,7 +34,7 @@ class Tabela(object):
 		self.yatch = 50
 		self.big_straight = 35
 		self.full_house = 25
-		self.little_straight = 20
+		self.small_straight = 20
 		self.four_of_a_kind = 40
 		self.zero = 0
 

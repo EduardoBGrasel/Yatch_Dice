@@ -2,12 +2,8 @@
 # -*- coding: UTF-8 -*-
 #from dominio_da_solucao import Mesa
 from random import randint
-from typing import List
 
 class Dado(object):
-	def definir_dado(self, aIndex_selecionado : int):
-		pass
-
 	def remover_destaque(self):
 		self.selecionado = False
 

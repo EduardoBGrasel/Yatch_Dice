@@ -24,7 +24,7 @@ class Jogador(object):
 		return self.current_attempts
 
 	def zera_attempts(self):
-		self.current_attempts = 0;
+		self.current_attempts = 0
 	
 	def get_max_attempts(self):
 		return self.max_attempts
@@ -53,13 +53,13 @@ class Jogador(object):
 	def get_symbol(self):
 		return self.symbol
 
-	def informar_vez(self) -> int:
+	def informar_vez(self):
 		return self.turno
 
-	def informa_vencedor(self) -> int:
+	def informa_vencedor(self):
 		return self.vencedor
 
-	def informa_jogador(self) -> str:
+	def informa_jogador(self):
 		self.name
 
 	def get_pontuacao_total(self):

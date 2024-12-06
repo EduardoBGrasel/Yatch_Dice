@@ -79,7 +79,7 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
                     #self.player_points[0] += points
                     #self.Player_1_label.setText(f"Player_1: {self.player_points[0]}")
                     game_state = self.tabuleiro.get_status()
-                    self.atualiza_interface(game_state)
+                    self.atualiza_mensagem(game_state)
                     self.dog_server_interface.send_move(move_to_send)
     
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:
@@ -131,7 +131,7 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
                 local_player_id = start_status.get_local_id()
                 self.tabuleiro.start_match(players, local_player_id)
                 game_state = self.tabuleiro.get_status()
-                self.atualiza_interface(game_state)
+                self.atualiza_mensagem(game_state)
                 QMessageBox.about(self, "DogActor", f"{start_status.get_message()}")
     
 
@@ -144,12 +144,12 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
         local_player_id = start_status.get_local_id()
         self.tabuleiro.start_match(players, local_player_id)
         game_state = self.tabuleiro.get_status()
-        self.atualiza_interface(game_state)
+        self.atualiza_mensagem(game_state)
     
     def receive_withdrawal_notification(self):
         self.tabuleiro.receive_withdrawal_notification()
         game_state = self.tabuleiro.get_status()
-        self.atualiza_interface(game_state)
+        self.atualiza_mensagem(game_state)
 
     def atualiza_mensagem(self, game_state):
         self.show_message(game_state.get_message())
@@ -187,7 +187,7 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
         for dado in self.dados_interface:
             dado.setVisible(False)
         game_state = self.tabuleiro.get_status()
-        self.atualiza_interface(game_state)
+        self.atualiza_mensagem(game_state)
         # Ajustar o nome para encontrar o QTextBrowser correspondente
         # for box in self.findChildren(QTextBrowser):
         #     if box.objectName().replace('_value', "") == button.objectName().replace('_btn', ""):
@@ -219,5 +219,5 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
             if self(a_move["vencedor"]):
                 self.tabuleiro.match_status = 2
                 status = self.tabuleiro.get_status()
-                self.atualiza_interface(status)
+                self.atualiza_mensagem(status)
             

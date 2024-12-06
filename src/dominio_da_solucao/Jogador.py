@@ -1,78 +1,83 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-from dominio_da_solucao import Tabuleiro
-from dominio_da_solucao import Tabela
-from dominio_da_solucao import QPixmap
+from dominio_da_solucao.Tabela import Tabela
 from typing import List
 
 class Jogador(object):
+	def __init__(self):
+		self.max_attempts = 4
+		self.current_attempts = 0
+		self.total_points = 0
+		self.name = ""
+		self.symbol = None
+		self.indentifier = 0
+		self.rounds_finalizados = False
+		self.vencedor = False
+		self.turno = False
+		self.pontuacao_round_atribuida = 0
+		self.jogada_finalizada = False
+	
+	def incrementa_current_attempts(self):
+		self.current_attempts = self.current_attempts + 1
+
+	def get_current_attempts(self):
+		return self.current_attempts
+
+	def zera_attempts(self):
+		self.current_attempts = 0;
+	
+	def get_max_attempts(self):
+		return self.max_attempts
+
 	def atribuir_pontuacao(self, pontos : int) -> int:
-		pass
+		self.total_points += pontos
 
 	def eh_seu_turno(self) -> bool:
-		if self.___turno == 1:
+		if self.turno == 1:
 			return True
 		else:
 			return False
-
-	def inverter_turno(self):
-		if self.___turno == 1:
-			self.___turno == 0
-		else:
-			self.___turno == 1
+	
+	def reset(self):
+		self.attempts = 0
+		self.total_points = 0
+		self.name = ""
+		self.symbol = None
+		self.indentifier = 0
+		self.rounds_finalizados = False
+		self.vencedor = False
+		self.turno = False
+		self.pontuacao_round_atribuida = 0
+		self.jogada_finalizada = False
+	
+	def get_symbol(self):
+		return self.symbol
 
 	def informar_vez(self) -> int:
-		return self.___turno
+		return self.turno
 
 	def informa_vencedor(self) -> int:
-		return self.___vencedor
+		return self.vencedor
 
 	def informa_jogador(self) -> str:
-		self.___nome_jogador 
+		self.name
 
-	def reiniciar(self):
-		# ???
-		pass
+	def get_pontuacao_total(self):
+		return self.total_points
 
 	def initialize(self, aSymbol : int, aIdentifier : str, aName : str):
-		# [TODO] - @Dudu
-		pass
+		self.reset()
+		self.name = aName
+		self.symbol = aSymbol
+		self.indentifier = aIdentifier
+
+	def get_name(self):
+		return self.name
 
 	def toogle_turn(self):
-		# [TODO] - @Dudu
-		pass
+		if self.turno == False:
+			self.turno = True
+		elif self.turno == True:
+			self.turno == False
 
-	def iniciar_partida(self):
-		# [TODO] - @Dudu
-		pass
-
-	def atualiza_gui(self, aEstado_jogo : QPixmap):
-		# [TODO] - @Dudu
-		pass
-
-	def pontuacao_atribuida(self):
-		# ???
-		pass
-
-	def get_rounds_finalizados(self) -> int:
-		return self.___rounds_finalizados
-
-	def get_vencedor(self) -> int:
-		return self.___rounds_finalizados
-
-	def verifica_pontuacao_diferente(self) -> int:
-		# [TODO] - Pensar como pegar a pontuacao do oponente
-		pass
-
-	def __init__(self):
-		self.___attempts : int = None
-		self.___total_points : int = None
-		self.___nome_jogador : str = None
-		self.___rounds_finalizados : int = None
-		self.___vencedor : int = None
-		self.___turno : int = None
-		self.___pontuacao_round_atribuida : int = None
-		self.___jogada_finalizada : int = None
-		self._unnamed_Tabuleiro_ : Tabuleiro = None
-		self._unnamed_Tabela_ : Tabela = None
 

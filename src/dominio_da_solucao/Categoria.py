@@ -84,5 +84,3 @@ class Categoria(object):
 		self.categoty_points : int = None
 		self.tabela = Tabela()
 		self.mesa = Mesa()
-
-

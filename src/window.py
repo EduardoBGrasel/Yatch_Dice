@@ -355,6 +355,12 @@ class Ui_MainWindow(object):
         self.layoutWidget2 = QWidget(self.Mesa_Frame)
         self.layoutWidget2.setObjectName(u"layoutWidget2")
         self.layoutWidget2.setGeometry(QRect(110, 590, 521, 121))
+        # Criar o QLabel para o status
+        self.status_label = QLabel("Bem-vindo ao jogo!", self.layoutWidget2)
+        self.status_label.setStyleSheet("color: black; font-size: 16px;")
+        self.status_label.setMinimumWidth(521)
+        self.status_label.setAlignment(Qt.AlignCenter)
+        #
         self.horizontalLayout_2 = QHBoxLayout(self.layoutWidget2)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)

@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-from dominio_da_solucao.Tabela import Tabela
 from typing import List
 
 class Jogador(object):

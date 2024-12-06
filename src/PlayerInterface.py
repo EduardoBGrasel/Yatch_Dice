@@ -158,9 +158,10 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
             pixmap = QPixmap(f"dados_img/{dados[index]['number']}.png")
             pixmap = pixmap.scaled(101, 101)
             self.dados_interface[index].setPixmap(pixmap)
-
             # Remove a borda vermelha após rejogar
             self.dados_interface[index].setStyleSheet("")  # Remove a borda
+            status = self.tabuleiro.get_status()
+            self.atualiza_mensagem(status)
 
         # Torna todos os dados visíveis (apenas se eles foram jogados)
         for dado_interface in self.dados_interface:

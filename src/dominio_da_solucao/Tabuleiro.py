@@ -95,7 +95,7 @@ class Tabuleiro(object):
 			for i in range(len(dados)):
 				dados[i].remover_destaque()
 			move_to_send = {"dados": [dado.to_dict() for dado in dados]}
-			move_to_send["match_status"] = "next"
+			move_to_send["match_status"] = ""
 			move_to_send["type"] = "dados_jogados"
 			jogador.incrementa_current_attempts()
 			return move_to_send
@@ -105,7 +105,7 @@ class Tabuleiro(object):
 			for i in range(len(dados)):
 				dados[i].remover_destaque()
 			move_to_send = {"dados": [dado.to_dict() for dado in dados]}
-			move_to_send["match_status"] = "next"
+			move_to_send["match_status"] = ""
 			move_to_send["type"] = "dados_jogados"
 			jogador.incrementa_current_attempts()
 			return move_to_send
@@ -122,7 +122,7 @@ class Tabuleiro(object):
 			move_to_send["type"] = "dado_selecionado"
 			move_to_send["index"] = index
 			move_to_send["destaque"] = dados[index].get_destaque()
-			move_to_send["match_status"] = "next"
+			move_to_send["match_status"] = ""
 			return move_to_send
 
 	def escolher_categoria(self, str1):
@@ -138,77 +138,77 @@ class Tabuleiro(object):
 				pontos = self.categoria.atribuir_pontuacao(1, dados)
 				move_to_send["category"] = str1
 				move_to_send["pontuacao"] = pontos
-				move_to_send["match_status"] = "next"
+				move_to_send["match_status"] = ""
 				move_to_send["type"] = "categoria"
 
 			elif "Twos" in str1:
 				pontos = self.categoria.atribuir_pontuacao(2, dados)
 				move_to_send["category"] = str1
 				move_to_send["pontuacao"] = pontos
-				move_to_send["match_status"] = "next"
+				move_to_send["match_status"] = ""
 				move_to_send["type"] = "categoria"
 
 			elif "Threes" in str1:
 				pontos = self.categoria.atribuir_pontuacao(3, dados)
 				move_to_send["category"] = str1
 				move_to_send["pontuacao"] = pontos
-				move_to_send["match_status"] = "next"
+				move_to_send["match_status"] = ""
 				move_to_send["type"] = "categoria"
 
 			elif "Fours" in str1:
 				pontos = self.categoria.atribuir_pontuacao(4, dados)
 				move_to_send["category"] = str1
 				move_to_send["pontuacao"] = pontos
-				move_to_send["match_status"] = "next"
+				move_to_send["match_status"] = ""
 				move_to_send["type"] = "categoria"
 
 			elif "Fives" in str1:
 				pontos = self.categoria.atribuir_pontuacao(5, dados)
 				move_to_send["category"] = str1
 				move_to_send["pontuacao"] = pontos
-				move_to_send["match_status"] = "next"
+				move_to_send["match_status"] = ""
 				move_to_send["type"] = "categoria"
 
 			elif "Sixes" in str1:
 				pontos = self.categoria.atribuir_pontuacao(6, dados)
 				move_to_send["category"] = str1
 				move_to_send["pontuacao"] = pontos
-				move_to_send["match_status"] = "next"
+				move_to_send["match_status"] = ""
 				move_to_send["type"] = "categoria"
 
 			elif "Full_House" in str1:
 				pontos = self.categoria.atribuir_pontuacao(8, dados_valores)
 				move_to_send["category"] = str1
 				move_to_send["pontuacao"] = pontos
-				move_to_send["match_status"] = "next"
+				move_to_send["match_status"] = ""
 				move_to_send["type"] = "categoria"
 
 			elif "S_Straight" in str1:
 				pontos = self.categoria.atribuir_pontuacao(9, dados_valores)
 				move_to_send["category"] = str1
 				move_to_send["pontuacao"] = pontos
-				move_to_send["match_status"] = "next"
+				move_to_send["match_status"] = ""
 				move_to_send["type"] = "categoria"
 
 			elif "B_Straight" in str1:
 				pontos = self.categoria.atribuir_pontuacao(10, dados_valores)
 				move_to_send["category"] = str1
 				move_to_send["pontuacao"] = pontos
-				move_to_send["match_status"] = "next"
+				move_to_send["match_status"] = ""
 				move_to_send["type"] = "categoria"
 
 			elif "Yatch" in str1:
 				pontos = self.categoria.atribuir_pontuacao(11, dados_valores)
 				move_to_send["category"] = str1
 				move_to_send["pontuacao"] = pontos
-				move_to_send["match_status"] = "next"
+				move_to_send["match_status"] = ""
 				move_to_send["type"] = "categoria"
 
 			elif "Four_Of" in str1:
 				pontos = self.categoria.atribuir_pontuacao(7, dados_valores)
 				move_to_send["category"] = str1
 				move_to_send["pontuacao"] = pontos
-				move_to_send["match_status"] = "next"
+				move_to_send["match_status"] = ""
 				move_to_send["type"] = "categoria"
 			
 

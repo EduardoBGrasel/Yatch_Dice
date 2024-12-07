@@ -187,19 +187,6 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
             dado.setVisible(False)
         game_state = self.tabuleiro.get_status()
         self.atualiza_mensagem(game_state)
-        # Ajustar o nome para encontrar o QTextBrowser correspondente
-        # for box in self.findChildren(QTextBrowser):
-        #     if box.objectName().replace('_value', "") == button.objectName().replace('_btn', ""):
-            
-
-        
-
-
-#     box.setText(str(points))  # Atualiza o QTextBrowser com os pontos
-    
-#     # Oculta os dados da interface
-#     for dado in self.dados_interface:
-#         dado.setVisible(False)
 
     
     def receive_move(self, a_move):
@@ -211,8 +198,8 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
             destaque = a_move["destaque"]
             self.atualiza_dados_selecionados(index, destaque)
         elif a_move["type"] == "categoria":
+            self.tabuleiro.recieve_move(a_move)
             pontuacao = a_move["pontuacao"]
             button = a_move["category"]
-            self.tabuleiro.match_status = 3
             self.update_category_signal.emit(button, pontuacao)
             

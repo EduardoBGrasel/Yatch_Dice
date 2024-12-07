@@ -20,11 +20,9 @@ class Tabuleiro(object):
 		self.player_turn : int = None
 		self.vencedor = ""
 		self.empate = False
+		self.rounds = 2
 
 
-	def recieve_move(self, a_move):
-		if a_move["type"] == "dados_jogados":
-			pass
 			
 
 	def receive_withdrawal_notification(self):
@@ -76,9 +74,9 @@ class Tabuleiro(object):
 		return symbol
 
 	def get_turn_player(self) -> Jogador:
-		if self.local_player.eh_seu_turno():
+		if self.local_player.get_turno():
 			return self.local_player
-		elif self.remote_player.eh_seu_turno():
+		elif self.remote_player.get_turno():
 			return self.remote_player
 	
 	def get_regular_move(self):
@@ -131,9 +129,10 @@ class Tabuleiro(object):
 		for i in range(len(dados)):
 			dados_valores.append(dados[i].dado_get_numero())
 		move_to_send = {}
+		move_to_send["vencedor"] = ""
 		pontos = 0
 		jogador = self.get_turn_player()
-		if self.match_status == 4:
+		if self.match_status == 4 or self.match_status == 3:
 			if "Ones" in str1:
 				pontos = self.categoria.atribuir_pontuacao(1, dados)
 				move_to_send["category"] = str1
@@ -212,18 +211,43 @@ class Tabuleiro(object):
 				move_to_send["type"] = "categoria"
 			
 
-			jogador.atribuir_pontuacao(pontos)
 			self.regular_move = True
 			jogador.zera_attempts()
+			jogador.atribuir_pontuacao(pontos)
+			
 			self.local_player.toogle_turn()
 			self.remote_player.toogle_turn()
-			if self.local_player.eh_seu_turno():
-				self.match_status = 5  #    waiting piece or origin selection (first action)
+
+			if self.local_player.get_turno():
+				self.match_status = 5
 			else:
-				self.match_status = 3  #    waiting remote move
-				
+				self.match_status = 3
+			
+			# Sincronização dos decrementos
+			self.rounds -= 1
+			if self.rounds == 0:
+				self.finished = True
+				self.match_status = 2
+				print("fim")
+
 		return move_to_send
 	
+	def recieve_move(self, a_move):
+		if a_move["type"] == "categoria":
+			# Sincronização dos decrementos
+			self.rounds -= 1
+			self.local_player.toogle_turn()
+			self.remote_player.toogle_turn()
+			jogador = self.get_turn_player()
+			if jogador.get_turno():
+				self.match_status = 3
+			else:
+				self.match_status = 5
+			if self.rounds == 0:
+				self.finished = True
+				self.match_status = 2
+				print("fim")
+
 	def get_finished(self):
 		return self.finished
 

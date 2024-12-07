@@ -15,16 +15,10 @@ class Jogador(object):
 		self.turno = False
 		self.pontuacao_round_atribuida = 0
 		self.jogada_finalizada = False
-		self.rounds = 1
+
 	
 	def incrementa_current_attempts(self):
 		self.current_attempts = self.current_attempts + 1
-	
-	def decrementa_round(self):
-		self.rounds = self.rounds - 1
-	
-	def get_rounds(self):
-		return self.rounds
 
 	def get_current_attempts(self):
 		return self.current_attempts
@@ -38,7 +32,7 @@ class Jogador(object):
 	def atribuir_pontuacao(self, pontos : int) -> int:
 		self.total_points += pontos
 
-	def eh_seu_turno(self) -> bool:
+	def get_turno(self) -> bool:
 		if self.turno == 1:
 			return True
 		else:
@@ -59,7 +53,7 @@ class Jogador(object):
 	def get_symbol(self):
 		return self.symbol
 
-	def informar_vez(self):
+	def get_turno(self):
 		return self.turno
 
 	def informa_vencedor(self):

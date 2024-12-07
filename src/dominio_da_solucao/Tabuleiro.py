@@ -20,7 +20,7 @@ class Tabuleiro(object):
 		self.player_turn : int = None
 		self.vencedor = ""
 		self.empate = False
-		self.rounds = 2
+		self.rounds = 4
 
 
 			
@@ -215,6 +215,8 @@ class Tabuleiro(object):
 			jogador.zera_attempts()
 			jogador.atribuir_pontuacao(pontos)
 			
+			self.rounds -= 1
+			
 			self.local_player.toogle_turn()
 			self.remote_player.toogle_turn()
 
@@ -224,18 +226,25 @@ class Tabuleiro(object):
 				self.match_status = 3
 			
 			# Sincronização dos decrementos
-			self.rounds -= 1
 			if self.rounds == 0:
 				self.finished = True
 				self.match_status = 2
-				print("fim")
-
+				print(self.local_player.get_pontuacao_total(), self.remote_player.get_pontuacao_total())
+				if self.local_player.get_pontuacao_total() > self.remote_player.get_pontuacao_total():
+					self.set_vencedor(self.local_player.get_name())
+				elif self.local_player.get_pontuacao_total() < self.remote_player.get_pontuacao_total():
+					self.set_vencedor(self.remote_player.get_name())
+				else:
+					self.set_vencedor("empate")
+				move_to_send["vencedor"] = self.get_vencedor()
 		return move_to_send
 	
 	def recieve_move(self, a_move):
 		if a_move["type"] == "categoria":
 			# Sincronização dos decrementos
+			pontos = a_move["pontuacao"]
 			self.rounds -= 1
+			self.remote_player.atribuir_pontuacao(pontos)
 			self.local_player.toogle_turn()
 			self.remote_player.toogle_turn()
 			jogador = self.get_turn_player()
@@ -247,6 +256,9 @@ class Tabuleiro(object):
 				self.finished = True
 				self.match_status = 2
 				print("fim")
+				vencedor = a_move["vencedor"]
+				self.set_vencedor(vencedor)
+				
 
 	def get_finished(self):
 		return self.finished
@@ -263,4 +275,7 @@ class Tabuleiro(object):
 
 	def get_vencedor(self):
 		return self.vencedor
+
+	def set_vencedor(self, name):
+		self.vencedor = name
 

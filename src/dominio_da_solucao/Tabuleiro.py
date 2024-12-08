@@ -4,7 +4,7 @@ from dominio_da_solucao.Jogador import Jogador
 from dominio_da_solucao.Mesa import Mesa
 from dominio_da_solucao.Categoria import Categoria
 from dominio_da_solucao.Dado import Dado
-from dominio_da_solucao.interface_image import InterfaceImage
+from dominio_da_solucao.interface_image import InterfaceMessage
 
 class Tabuleiro(object):
 	def __init__(self):
@@ -20,7 +20,7 @@ class Tabuleiro(object):
 		self.player_turn : int = None
 		self.vencedor = ""
 		self.empate = False
-		self.rounds = 4
+		self.rounds = 22
 
 
 			
@@ -29,7 +29,7 @@ class Tabuleiro(object):
 		self.match_status = 6
 
 	def get_status(self):
-		interface = InterfaceImage()
+		interface = InterfaceMessage()
 		turn_player = self.get_turn_player()
 		if not self.regular_move:
 			interface.set_message(turn_player.get_name() + ", jogada irregular!")

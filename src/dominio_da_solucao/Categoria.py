@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-from dominio_da_solucao.Mesa import Mesa
 from dominio_da_solucao.Tabela import Tabela
 
 class Categoria(object):
@@ -82,4 +81,3 @@ class Categoria(object):
 	def __init__(self):
 		self.categoria_escolhida : int = None
 		self.tabela = Tabela()
-		self.mesa = Mesa()

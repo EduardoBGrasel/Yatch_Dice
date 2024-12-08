@@ -100,7 +100,7 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
             else:
                 # Adiciona o destaque (borda vermelha)
                 move_to_send = self.tabuleiro.dado_selecionado(index, "add")
-                dado.setStyleSheet("border: 1px solid red;")
+                dado.setStyleSheet("border: 3px solid red;")
         self.dog_server_interface.send_move(move_to_send)
 
 
@@ -172,7 +172,7 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
         if not destaque:
             dado.setStyleSheet("")
         else:
-            dado.setStyleSheet("border: 1px solid red;")
+            dado.setStyleSheet("border: 3px solid red;")
     
     def atualiza_categoria(self, button_name, points):
         # Encontrar o botão na interface pelo nome
@@ -198,7 +198,7 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
             destaque = a_move["destaque"]
             self.atualiza_dados_selecionados(index, destaque)
         elif a_move["type"] == "categoria":
-            self.tabuleiro.recieve_move(a_move)
+            self.tabuleiro.recieve_category(a_move)
             pontuacao = a_move["pontuacao"]
             button = a_move["category"]
             self.update_category_signal.emit(button, pontuacao)

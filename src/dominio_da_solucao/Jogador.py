@@ -10,11 +10,8 @@ class Jogador(object):
 		self.name = ""
 		self.symbol = None
 		self.indentifier = 0
-		self.rounds_finalizados = False
 		self.vencedor = False
 		self.turno = False
-		self.pontuacao_round_atribuida = 0
-		self.jogada_finalizada = False
 
 	
 	def incrementa_current_attempts(self):
@@ -44,11 +41,8 @@ class Jogador(object):
 		self.name = ""
 		self.symbol = None
 		self.indentifier = 0
-		self.rounds_finalizados = False
 		self.vencedor = False
 		self.turno = False
-		self.pontuacao_round_atribuida = 0
-		self.jogada_finalizada = False
 	
 	def get_symbol(self):
 		return self.symbol

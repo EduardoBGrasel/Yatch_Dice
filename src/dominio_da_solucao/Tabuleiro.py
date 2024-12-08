@@ -19,11 +19,7 @@ class Tabuleiro(object):
 		self.match_status = 1
 		self.player_turn : int = None
 		self.vencedor = ""
-		self.empate = False
 		self.rounds = 22
-
-
-			
 
 	def receive_withdrawal_notification(self):
 		self.match_status = 6
@@ -78,10 +74,6 @@ class Tabuleiro(object):
 			return self.local_player
 		elif self.remote_player.get_turno():
 			return self.remote_player
-	
-	def get_regular_move(self):
-		return self.regular_move
-
 
 	def jogar_dados(self):
 		jogador = self.get_turn_player()
@@ -99,7 +91,7 @@ class Tabuleiro(object):
 			return move_to_send
 		elif self.match_status == 4:
 			dados = self.mesa.get_dados()
-			dados = self.mesa.copo.rejogar_dados(dados)
+			dados = self.mesa.rejogar_dados(dados)
 			for i in range(len(dados)):
 				dados[i].remover_destaque()
 			move_to_send = {"dados": [dado.to_dict() for dado in dados]}
@@ -215,7 +207,7 @@ class Tabuleiro(object):
 			jogador.zera_attempts()
 			jogador.atribuir_pontuacao(pontos)
 			
-			self.rounds -= 1
+			self.decrementa_rounds()
 			
 			self.local_player.toogle_turn()
 			self.remote_player.toogle_turn()
@@ -229,7 +221,6 @@ class Tabuleiro(object):
 			if self.rounds == 0:
 				self.finished = True
 				self.match_status = 2
-				print(self.local_player.get_pontuacao_total(), self.remote_player.get_pontuacao_total())
 				if self.local_player.get_pontuacao_total() > self.remote_player.get_pontuacao_total():
 					self.set_vencedor(self.local_player.get_name())
 				elif self.local_player.get_pontuacao_total() < self.remote_player.get_pontuacao_total():
@@ -239,11 +230,11 @@ class Tabuleiro(object):
 				move_to_send["vencedor"] = self.get_vencedor()
 		return move_to_send
 	
-	def recieve_move(self, a_move):
+	def recieve_category(self, a_move):
 		if a_move["type"] == "categoria":
 			# Sincronização dos decrementos
 			pontos = a_move["pontuacao"]
-			self.rounds -= 1
+			self.decrementa_rounds()
 			self.remote_player.atribuir_pontuacao(pontos)
 			self.local_player.toogle_turn()
 			self.remote_player.toogle_turn()
@@ -255,9 +246,11 @@ class Tabuleiro(object):
 			if self.rounds == 0:
 				self.finished = True
 				self.match_status = 2
-				print("fim")
 				vencedor = a_move["vencedor"]
 				self.set_vencedor(vencedor)
+	
+	def decrementa_rounds(self):
+		self.rounds = self.rounds - 1
 				
 
 	def get_finished(self):

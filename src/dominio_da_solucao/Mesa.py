@@ -8,6 +8,10 @@ class Mesa(object):
 		self.dados_jogados = self.copo.jogar_dados()
 		return self.dados_jogados
 
+	def rejogar_dados(self, dados):
+		dados = self.copo.rejogar_dados(dados)
+		return dados
+
 	def dado_selecionado(self, index, dados):
 		self.copo.dado_selecionado(index, dados)
 

@@ -79,5 +79,4 @@ class Categoria(object):
 		return all(numero == dados[0] for numero in dados)
 
 	def __init__(self):
-		self.categoria_escolhida : int = None
 		self.tabela = Tabela()

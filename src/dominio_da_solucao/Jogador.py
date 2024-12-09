@@ -29,11 +29,6 @@ class Jogador(object):
 	def atribuir_pontuacao(self, pontos : int) -> int:
 		self.total_points += pontos
 
-	def get_turno(self) -> bool:
-		if self.turno == 1:
-			return True
-		else:
-			return False
 	
 	def reset(self):
 		self.attempts = 0

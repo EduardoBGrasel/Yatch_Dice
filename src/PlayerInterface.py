@@ -93,7 +93,7 @@ class PlayerInterface(QMainWindow, Ui_MainWindow, DogPlayerInterface):
         move_to_send = {}
         if match_status == 4 or match_status == 3:
             # Verifica se o dado já está destacado
-            if "border: 1px solid red;" in dado.styleSheet():
+            if "border: 3px solid red;" in dado.styleSheet():
                 # Remove o destaque (borda vermelha)
                 move_to_send = self.tabuleiro.dado_selecionado(index, "remove")
                 dado.setStyleSheet("")

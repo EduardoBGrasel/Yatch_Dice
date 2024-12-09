@@ -19,7 +19,7 @@ class Tabuleiro(object):
 		self.match_status = 1
 		self.player_turn : int = None
 		self.vencedor = ""
-		self.rounds = 22
+		self.rounds = 6
 
 	def receive_withdrawal_notification(self):
 		self.match_status = 6
